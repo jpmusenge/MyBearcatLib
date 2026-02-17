@@ -29,12 +29,30 @@
 		3A199E142F42E19A0030AC0C /* BearcatLibUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearcatLibUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		3A199DFF2F42E1980030AC0C /* BearcatLib */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BearcatLib;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3A199E382F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLib" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				BearcatLibApp.swift,
+				ContentView.swift,
+				Models/Book.swift,
+				Views/BookSearch/BookRowView.swift,
+			);
+			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
 		};
+		3A199E392F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				BearcatLibApp.swift,
+				ContentView.swift,
+			);
+			target = 3A199E132F42E19A0030AC0C /* BearcatLibUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		3A199E0D2F42E19A0030AC0C /* BearcatLibTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BearcatLibTests;
@@ -43,6 +61,15 @@
 		3A199E172F42E19A0030AC0C /* BearcatLibUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BearcatLibUITests;
+			sourceTree = "<group>";
+		};
+		3A199E342F43DD530030AC0C /* BearcatLib */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3A199E382F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLib" target */,
+				3A199E392F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibUITests" target */,
+			);
+			path = BearcatLib;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,10 +102,10 @@
 		3A199DF42F42E1980030AC0C = {
 			isa = PBXGroup;
 			children = (
-				3A199DFF2F42E1980030AC0C /* BearcatLib */,
-				3A199E0D2F42E19A0030AC0C /* BearcatLibTests */,
+				3A199E342F43DD530030AC0C /* BearcatLib */,
 				3A199E172F42E19A0030AC0C /* BearcatLibUITests */,
 				3A199DFE2F42E1980030AC0C /* Products */,
+				3A199E0D2F42E19A0030AC0C /* BearcatLibTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,9 +133,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				3A199DFF2F42E1980030AC0C /* BearcatLib */,
 			);
 			name = BearcatLib;
 			packageProductDependencies = (
@@ -155,6 +179,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				3A199E172F42E19A0030AC0C /* BearcatLibUITests */,
+				3A199E342F43DD530030AC0C /* BearcatLib */,
 			);
 			name = BearcatLibUITests;
 			packageProductDependencies = (
