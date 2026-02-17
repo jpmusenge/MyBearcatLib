@@ -35,9 +35,11 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				BearcatLibApp.swift,
-				ContentView.swift,
 				Models/Book.swift,
+				Utilities/SampleData.swift,
+				Utilities/Theme.swift,
 				Views/BookSearch/BookRowView.swift,
+				Views/MainTabView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
 		};
@@ -46,9 +48,15 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				BearcatLibApp.swift,
-				ContentView.swift,
 			);
 			target = 3A199E132F42E19A0030AC0C /* BearcatLibUITests */;
+		};
+		3A199E782F444C660030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Views/MainTabView.swift,
+			);
+			target = 3A199E092F42E19A0030AC0C /* BearcatLibTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -67,6 +75,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				3A199E382F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLib" target */,
+				3A199E782F444C660030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibTests" target */,
 				3A199E392F43DD530030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibUITests" target */,
 			);
 			path = BearcatLib;
