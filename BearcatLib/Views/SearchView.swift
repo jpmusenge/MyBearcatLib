@@ -76,10 +76,7 @@ struct SearchView: View {
             .searchable(text: $searchText, prompt: "Search titles, authors, or ISBN...")
             .navigationTitle("Search Catalog")
             .navigationDestination(for: Book.self) { book in
-                // We will build this next!
-                Text("Detail for: \(book.title)")
-                    .navigationTitle(book.title)
-                    .navigationBarTitleDisplayMode(.inline)
+                BookDetailView(book: book)
             }
         }
     }
