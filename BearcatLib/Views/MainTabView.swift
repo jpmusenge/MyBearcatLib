@@ -12,23 +12,35 @@ import SwiftUI
 struct MainTabView: View {
     
     // Track which tab is selected. Starts on "browse"
-    @State private var selectedTab = "browse"
+    @State private var selectedTab = "home"
+    @State private var showPrintSheet = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
             
             // Tab 1: Browse / Home
-            // This will be our HomeView (building it next!)
-            // For now, a placeholder so we can see the tabs working.
-            Text("Home Screen — Coming Next!")
+            // This will be our HomeView
+            HomeView(
+                onSearchTapped: { selectedTab = "search" },
+                onReserveTapped: { selectedTab = "search" },
+                onPrintTapped: { showPrintSheet = true },
+                onMyBooksTapped: { selectedTab = "mybooks" }
+            )
                 .tabItem {
-                    Image(systemName: "books.vertical")
-                    Text("Browse")
+                    Image(systemName: "house")
+                    Text("Home")
                 }
-                .tag("browse")
+                .tag("home")
+            
+            SearchView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+                .tag("search")
             
             // Tab 2: My Books
-            Text("My Books — Coming Soon!")
+            BookCardView(book: SampleData.books[0])
                 .tabItem {
                     Image(systemName: "book.closed")
                     Text("My Books")
@@ -45,12 +57,14 @@ struct MainTabView: View {
         }
         // Tint the active tab icon and label with our royal blue
         .tint(Theme.Colors.primary)
+//        .sheet(isPresented: $showPrintSheet) {
+//            PrintView()
+//        }
     }
 }
 
 // MARK: - Preview
 // #Preview lets you see this view in Xcode's canvas (right side)
-// without running the full app in the simulator
 
 #Preview {
     MainTabView()
