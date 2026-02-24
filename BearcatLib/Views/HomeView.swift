@@ -12,26 +12,27 @@ import SwiftUI
 
 struct HomeView: View {
     
+    // Actions passed in from MainTabView
+    var onSearchTapped: () -> Void = {}
+    var onReserveTapped: () -> Void = {}
+    var onPrintTapped: () -> Void = {}
+    var onMyBooksTapped: () -> Void = {}
+    
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 32) {
-                    
                     // Hero & Status
                     headerSection
-                    
                     // Big Search Bar
                     searchBarButton
-                    
                     // Quick Actions Grid
                     quickActionsSection
-                    
                     // Due Soon (Urgent Alerts)
                     dueSoonSection
-                    
                     // Featured Books
                     featuredBooksSection
-                    
+    
                     Spacer().frame(height: 40)
                 }
                 .padding(.top, 16)
@@ -88,9 +89,8 @@ struct HomeView: View {
     
     // MARK: - Search Bar Button
     private var searchBarButton: some View {
-        Button(action: {
+        Button(action: onSearchTapped) {
             // Navigate to Search
-        }) {
             HStack(spacing: 12) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 20, weight: .medium))
@@ -119,12 +119,12 @@ struct HomeView: View {
             
             HStack(spacing: 16) {
                 VStack(spacing: 16) {
-                    ModernQuickAction(icon: "bookmark.fill", title: "Reserve", useAccent: false)
-                    ModernQuickAction(icon: "printer.fill", title: "Print", useAccent: true) // printing pain point
+                    ModernQuickAction(icon: "bookmark.fill", title: "Reserve", useAccent: false, action: onReserveTapped)
+                    ModernQuickAction(icon: "printer.fill", title: "Print", useAccent: true, action: onPrintTapped)
                 }
                 VStack(spacing: 16) {
-                    ModernQuickAction(icon: "barcode.viewfinder", title: "Scan ISBN", useAccent: false)
-                    ModernQuickAction(icon: "map.fill", title: "Floor Map", useAccent: false)
+                    ModernQuickAction(icon: "barcode.viewfinder", title: "Scan ISBN", useAccent: false, action: {})
+                    ModernQuickAction(icon: "map.fill", title: "Floor Map", useAccent: false, action: {})
                 }
             }
             .padding(.horizontal, Theme.Layout.paddingLarge)
@@ -143,9 +143,11 @@ struct HomeView: View {
                             .font(Theme.Fonts.title2)
                             .foregroundColor(Theme.Colors.textPrimary)
                         Spacer()
-                        Text("See all")
-                            .font(Theme.Fonts.subheadline)
-                            .foregroundColor(Theme.Colors.primary)
+                        Button("See all") {
+                            onMyBooksTapped()
+                        }
+                        .font(Theme.Fonts.subheadline)
+                        .foregroundColor(Theme.Colors.primary)
                     }
                     .padding(.horizontal, Theme.Layout.paddingLarge)
                     
@@ -172,9 +174,11 @@ struct HomeView: View {
                     .font(Theme.Fonts.title2)
                     .foregroundColor(Theme.Colors.textPrimary)
                 Spacer()
-                Text("See all")
-                    .font(Theme.Fonts.subheadline)
-                    .foregroundColor(Theme.Colors.primary)
+                Button("See all") {
+                    onSearchTapped()
+                }
+                .font(Theme.Fonts.subheadline)
+                .foregroundColor(Theme.Colors.primary)
             }
             .padding(.horizontal, Theme.Layout.paddingLarge)
             
@@ -198,9 +202,10 @@ struct ModernQuickAction: View {
     let icon: String
     let title: String
     let useAccent: Bool
+    var action: () -> Void
     
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             HStack(spacing: 14) {
                 // Soft background circle for the icon
                 ZStack {
