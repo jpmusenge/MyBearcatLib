@@ -47,13 +47,29 @@ enum Theme {
     
     // MARK: Fonts
     enum Fonts {
-        static let largeTitle = Font.system(size: 28, weight: .bold, design: .rounded)
-        static let title = Font.system(size: 22, weight: .bold, design: .rounded)
-        static let title2 = Font.system(size: 18, weight: .semibold, design: .rounded)
-        static let headline = Font.system(size: 16, weight: .semibold, design: .default)
-        static let body = Font.system(size: 16, weight: .regular, design: .default)
-        static let subheadline = Font.system(size: 14, weight: .regular, design: .default)
-        static let caption = Font.system(size: 12, weight: .medium, design: .default)
+        // Display — hero text, screen titles
+        static let largeTitle = Font.system(size: 30, weight: .heavy)
+        
+        // Title — section headers like "Quick Actions", "Due Soon"
+        static let title = Font.system(size: 22, weight: .bold)
+        
+        // Title2 — sub-section headers
+        static let title2 = Font.system(size: 18, weight: .bold)
+        
+        // Headline — card titles, important labels
+        static let headline = Font.system(size: 16, weight: .semibold)
+        
+        // Body — descriptions, paragraphs
+        static let body = Font.system(size: 16, weight: .regular)
+        
+        // Subheadline — secondary info like author names
+        static let subheadline = Font.system(size: 14, weight: .regular)
+        
+        // Caption — small labels, metadata, badges
+        static let caption = Font.system(size: 12, weight: .medium)
+        
+        // Caption2 — tiny labels
+        static let caption2 = Font.system(size: 10, weight: .semibold)
     }
     
     // MARK: Layout
