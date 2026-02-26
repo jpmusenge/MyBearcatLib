@@ -206,21 +206,23 @@ struct ModernQuickAction: View {
     
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 14) {
+            HStack(spacing: 12) {
                 // Soft background circle for the icon
                 ZStack {
                     Circle()
                         .fill(useAccent ? Theme.Colors.accent.opacity(0.15) : Theme.Colors.primary.opacity(0.1))
-                        .frame(width: 44, height: 44)
+                        .frame(width: 40, height: 40)
                     
                     Image(systemName: icon)
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(useAccent ? Theme.Colors.accent : Theme.Colors.primary)
                 }
                 
                 Text(title)
                     .font(Theme.Fonts.headline)
                     .foregroundColor(Theme.Colors.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
                 
                 Spacer()
             }
