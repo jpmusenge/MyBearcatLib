@@ -29,7 +29,7 @@ struct MainTabView: View {
             .sheet(isPresented: $showDatabases) {
                 // Wrapping it in a NavigationStack gives the nice title bar at the top
                 NavigationStack {
-                    DigitalResourcesView()
+                    ResourcesView()
                 }
             }
             .tabItem {
