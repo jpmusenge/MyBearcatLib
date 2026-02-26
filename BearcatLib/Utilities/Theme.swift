@@ -47,29 +47,14 @@ enum Theme {
     
     // MARK: Fonts
     enum Fonts {
-        // Display — hero text, screen titles
-        static let largeTitle = Font.system(size: 30, weight: .heavy)
-        
-        // Title — section headers like "Quick Actions", "Due Soon"
-        static let title = Font.system(size: 22, weight: .bold)
-        
-        // Title2 — sub-section headers
-        static let title2 = Font.system(size: 18, weight: .bold)
-        
-        // Headline — card titles, important labels
-        static let headline = Font.system(size: 16, weight: .semibold)
-        
-        // Body — descriptions, paragraphs
-        static let body = Font.system(size: 16, weight: .regular)
-        
-        // Subheadline — secondary info like author names
-        static let subheadline = Font.system(size: 14, weight: .regular)
-        
-        // Caption — small labels, metadata, badges
-        static let caption = Font.system(size: 12, weight: .medium)
-        
-        // Caption2 — tiny labels
-        static let caption2 = Font.system(size: 10, weight: .semibold)
+        // Upgraded to Avenir Next for a premium, geometric UI look
+        static let largeTitle = Font.custom("AvenirNext-Bold", size: 32)
+        static let title = Font.custom("AvenirNext-Bold", size: 24)
+        static let title2 = Font.custom("AvenirNext-DemiBold", size: 20)
+        static let headline = Font.custom("AvenirNext-DemiBold", size: 16)
+        static let body = Font.custom("AvenirNext-Regular", size: 16)
+        static let subheadline = Font.custom("AvenirNext-Medium", size: 14)
+        static let caption = Font.custom("AvenirNext-Medium", size: 12)
     }
     
     // MARK: Layout

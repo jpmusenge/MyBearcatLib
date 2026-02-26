@@ -146,7 +146,6 @@ private struct FilterChip: View {
 }
 
 // MARK: - Resource Card Component
-
 struct ResourceCard: View {
     let resource: LibraryResource
     
@@ -183,7 +182,7 @@ struct ResourceCard: View {
             // Bottom row: availability tag + link indicator
             HStack {
                 Text(resource.availableTo)
-                    .font(Theme.Fonts.caption2)
+                    .font(Theme.Fonts.caption)
                     .foregroundColor(Theme.Colors.primary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -193,7 +192,7 @@ struct ResourceCard: View {
                     )
                 
                 Text(resource.category.rawValue)
-                    .font(Theme.Fonts.caption2)
+                    .font(Theme.Fonts.caption)
                     .foregroundColor(Theme.Colors.textSecondary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
