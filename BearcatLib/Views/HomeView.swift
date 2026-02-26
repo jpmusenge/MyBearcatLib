@@ -15,7 +15,7 @@ struct HomeView: View {
     // Actions passed in from MainTabView
     var onSearchTapped: () -> Void = {}
     var onReserveTapped: () -> Void = {}
-    var onPrintTapped: () -> Void = {}
+    var onDatabasesTapped: () -> Void = {}
     var onMyBooksTapped: () -> Void = {}
     
     var body: some View {
@@ -120,7 +120,7 @@ struct HomeView: View {
             HStack(spacing: 16) {
                 VStack(spacing: 16) {
                     ModernQuickAction(icon: "bookmark.fill", title: "Reserve", useAccent: false, action: onReserveTapped)
-                    ModernQuickAction(icon: "printer.fill", title: "Print", useAccent: true, action: onPrintTapped)
+                    ModernQuickAction(icon: "network", title: "Databases", useAccent: true, action: onDatabasesTapped)
                 }
                 VStack(spacing: 16) {
                     ModernQuickAction(icon: "barcode.viewfinder", title: "Scan ISBN", useAccent: false, action: {})

@@ -187,3 +187,36 @@ enum SampleData {
         books.filter { !$0.isAvailable }
     }
 }
+
+// Sample data for digital resources view
+struct Resource: Identifiable {
+    let id = UUID()
+    let name: String
+    let description: String
+    let category: String
+    let iconName: String
+    let url: String
+}
+
+struct Announcement: Identifiable {
+    let id = UUID()
+    let title: String
+    let date: String
+    let summary: String
+    let isUrgent: Bool
+}
+
+extension SampleData {
+    static let resources: [Resource] = [
+        Resource(name: "JSTOR", description: "Academic journals, primary sources, and books.", category: "Databases", iconName: "books.vertical.fill", url: "https://jstor.org"),
+        Resource(name: "MAGNOLIA", description: "Mississippi's statewide database for research and journals.", category: "Databases", iconName: "magnifyingglass.circle.fill", url: "https://magnolia.msstate.edu"),
+        Resource(name: "IEEE Xplore", description: "Computer science and engineering research.", category: "Databases", iconName: "network", url: "https://ieeexplore.ieee.org"),
+        Resource(name: "O'Reilly Higher Ed", description: "Tech books, Docker tutorials, and coding resources.", category: "eBooks", iconName: "laptopcomputer", url: "https://oreilly.com"),
+        Resource(name: "Math & CS Tutoring", description: "Schedule a session for Calculus, Abstract Algebra, or coding help.", category: "Services", iconName: "x.squareroot", url: "https://rustcollege.edu/tutoring")
+    ]
+    
+    static let announcements: [Announcement] = [
+        Announcement(title: "Extended Hours for Finals", date: "Dec 1", summary: "The Leontyne Price Library will remain open until midnight Sunday-Thursday.", isUrgent: true),
+        Announcement(title: "New Swift Programming Books", date: "Nov 28", summary: "We just added 5 new iOS development books to the CS section on Floor 2.", isUrgent: false)
+    ]
+}

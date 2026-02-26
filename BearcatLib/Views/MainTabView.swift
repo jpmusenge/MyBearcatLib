@@ -14,23 +14,29 @@ struct MainTabView: View {
     // Track which tab is selected. Starts on "browse"
     @State private var selectedTab = "home"
     @State private var showPrintSheet = false
+    @State private var showDatabases = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
             
             // Tab 1: Browse / Home
-            // This will be our HomeView
             HomeView(
                 onSearchTapped: { selectedTab = "search" },
                 onReserveTapped: { selectedTab = "search" },
-                onPrintTapped: { showPrintSheet = true },
+                onDatabasesTapped: { showDatabases = true },
                 onMyBooksTapped: { selectedTab = "mybooks" }
             )
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
+            .sheet(isPresented: $showDatabases) {
+                // Wrapping it in a NavigationStack gives the nice title bar at the top
+                NavigationStack {
+                    DigitalResourcesView()
                 }
-                .tag("home")
+            }
+            .tabItem {
+                Image(systemName: "house")
+                Text("Home")
+            }
+            .tag("home")
             
             SearchView()
                 .tabItem {

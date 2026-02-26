@@ -38,8 +38,14 @@
 				Models/Book.swift,
 				Utilities/SampleData.swift,
 				Utilities/Theme.swift,
+				Views/BookCardView.swift,
+				Views/BookDetailView.swift,
 				Views/BookSearch/BookRowView.swift,
+				Views/DigitalResourcesView.swift,
+				Views/HomeView.swift,
 				Views/MainTabView.swift,
+				Views/MyBooksView.swift,
+				Views/SearchView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
 		};
@@ -54,7 +60,13 @@
 		3A199E782F444C660030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Views/BookCardView.swift,
+				Views/BookDetailView.swift,
+				Views/DigitalResourcesView.swift,
+				Views/HomeView.swift,
 				Views/MainTabView.swift,
+				Views/MyBooksView.swift,
+				Views/SearchView.swift,
 			);
 			target = 3A199E092F42E19A0030AC0C /* BearcatLibTests */;
 		};
