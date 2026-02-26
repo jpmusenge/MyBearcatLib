@@ -9,6 +9,27 @@
 
 import Foundation
 
+
+// MARK: - Library Resource Model
+
+struct LibraryResource: Identifiable {
+    let id = UUID()
+    let name: String
+    let description: String
+    let icon: String
+    let category: ResourceCategory
+    let url: String?
+    let availableTo: String
+    
+    enum ResourceCategory: String, CaseIterable {
+        case database = "Databases"
+        case journal = "Journals"
+        case tutoring = "Tutoring"
+        case technology = "Technology"
+        case other = "Other"
+    }
+}
+
 enum SampleData {
     
     /// A collection of books for the Leontyne Price Library
@@ -186,37 +207,115 @@ enum SampleData {
     static var checkedOutBooks: [Book] {
         books.filter { !$0.isAvailable }
     }
-}
-
-// Sample data for digital resources view
-struct Resource: Identifiable {
-    let id = UUID()
-    let name: String
-    let description: String
-    let category: String
-    let iconName: String
-    let url: String
-}
-
-struct Announcement: Identifiable {
-    let id = UUID()
-    let title: String
-    let date: String
-    let summary: String
-    let isUrgent: Bool
-}
-
-extension SampleData {
-    static let resources: [Resource] = [
-        Resource(name: "JSTOR", description: "Academic journals, primary sources, and books.", category: "Databases", iconName: "books.vertical.fill", url: "https://jstor.org"),
-        Resource(name: "MAGNOLIA", description: "Mississippi's statewide database for research and journals.", category: "Databases", iconName: "magnifyingglass.circle.fill", url: "https://magnolia.msstate.edu"),
-        Resource(name: "IEEE Xplore", description: "Computer science and engineering research.", category: "Databases", iconName: "network", url: "https://ieeexplore.ieee.org"),
-        Resource(name: "O'Reilly Higher Ed", description: "Tech books, Docker tutorials, and coding resources.", category: "eBooks", iconName: "laptopcomputer", url: "https://oreilly.com"),
-        Resource(name: "Math & CS Tutoring", description: "Schedule a session for Calculus, Abstract Algebra, or coding help.", category: "Services", iconName: "x.squareroot", url: "https://rustcollege.edu/tutoring")
+    
+    static let resources: [LibraryResource] = [
+        // Databases
+        LibraryResource(
+            name: "JSTOR",
+            description: "Access thousands of academic journals, books, and primary sources across all disciplines.",
+            icon: "books.vertical",
+            category: .database,
+            url: "https://www.jstor.org",
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "EBSCO Academic Search",
+            description: "Multi-disciplinary database with full-text articles from scholarly journals, magazines, and newspapers.",
+            icon: "text.magnifyingglass",
+            category: .database,
+            url: "https://search.ebscohost.com",
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "ProQuest",
+            description: "Dissertations, theses, and scholarly research. Great for finding sources for research papers.",
+            icon: "doc.text",
+            category: .database,
+            url: "https://www.proquest.com",
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "IEEE Xplore",
+            description: "Technical literature in engineering, computer science, and technology. Essential for CS courses.",
+            icon: "cpu",
+            category: .database,
+            url: "https://ieeexplore.ieee.org",
+            availableTo: "CS & Engineering"
+        ),
+        
+        // Journals
+        LibraryResource(
+            name: "Google Scholar",
+            description: "Search across scholarly articles, theses, books, and conference papers from all fields.",
+            icon: "graduationcap",
+            category: .journal,
+            url: "https://scholar.google.com",
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "PubMed",
+            description: "Biomedical and life sciences journal literature. Useful for biology and health science courses.",
+            icon: "heart.text.square",
+            category: .journal,
+            url: "https://pubmed.ncbi.nlm.nih.gov",
+            availableTo: "All Students"
+        ),
+        
+        // Tutoring
+        LibraryResource(
+            name: "Writing Center",
+            description: "Free help with essays, research papers, and any writing assignment. Walk-in or schedule ahead.",
+            icon: "pencil.and.outline",
+            category: .tutoring,
+            url: nil,
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "Math Tutoring Lab",
+            description: "Drop-in tutoring for algebra, calculus, statistics, and discrete math. Located on the 2nd floor.",
+            icon: "function",
+            category: .tutoring,
+            url: nil,
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "CS Peer Tutoring",
+            description: "Get help with programming assignments, data structures, and algorithms from senior CS students.",
+            icon: "chevron.left.forwardslash.chevron.right",
+            category: .tutoring,
+            url: nil,
+            availableTo: "CS Majors"
+        ),
+        
+        // Technology
+        LibraryResource(
+            name: "Laptop Checkout",
+            description: "Borrow a Chromebook or Windows laptop for up to 48 hours. Available at the front desk.",
+            icon: "laptopcomputer",
+            category: .technology,
+            url: nil,
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "Charger Lending",
+            description: "iPhone, Android, and laptop chargers available for in-library use. Ask at the front desk.",
+            icon: "battery.75percent",
+            category: .technology,
+            url: nil,
+            availableTo: "All Students"
+        ),
+        LibraryResource(
+            name: "Scanner & Copier",
+            description: "Self-service scanner and copier on the 1st floor near the entrance. Free scanning, copies $0.10/page.",
+            icon: "scanner",
+            category: .technology,
+            url: nil,
+            availableTo: "All Students"
+        ),
     ]
     
-    static let announcements: [Announcement] = [
-        Announcement(title: "Extended Hours for Finals", date: "Dec 1", summary: "The Leontyne Price Library will remain open until midnight Sunday-Thursday.", isUrgent: true),
-        Announcement(title: "New Swift Programming Books", date: "Nov 28", summary: "We just added 5 new iOS development books to the CS section on Floor 2.", isUrgent: false)
-    ]
+    // MARK: Resource Helpers
+    static var resourceCategories: [LibraryResource.ResourceCategory] {
+        LibraryResource.ResourceCategory.allCases
+    }
 }
