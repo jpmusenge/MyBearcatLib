@@ -46,7 +46,7 @@ struct MainTabView: View {
                 .tag("search")
             
             // Tab 2: My Books
-            BookCardView(book: SampleData.books[0])
+            MyBooksView()
                 .tabItem {
                     Image(systemName: "book.closed")
                     Text("My Books")
@@ -61,11 +61,6 @@ struct MainTabView: View {
                 }
                 .tag("profile")
         }
-        // Tint the active tab icon and label with our royal blue
-        .tint(Theme.Colors.primary)
-//        .sheet(isPresented: $showPrintSheet) {
-//            PrintView()
-//        }
     }
 }
 
