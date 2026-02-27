@@ -30,6 +30,14 @@ struct LibraryResource: Identifiable {
     }
 }
 
+struct Announcement: Identifiable {
+    let id = UUID()
+    let title: String
+    let date: String
+    let summary: String
+    let isUrgent: Bool
+}
+
 enum SampleData {
     
     /// A collection of books for the Leontyne Price Library
@@ -313,6 +321,21 @@ enum SampleData {
             availableTo: "All Students"
         ),
     ]
+    
+    static let announcements: [Announcement] = [
+            Announcement(
+                title: "Extended Hours for Finals",
+                date: "Dec 1",
+                summary: "The Leontyne Price Library will remain open until midnight Sunday-Thursday.",
+                isUrgent: true
+            ),
+            Announcement(
+                title: "New Swift Programming Books",
+                date: "Nov 28",
+                summary: "We just added 5 new iOS development books to the CS section on Floor 2.",
+                isUrgent: false
+            )
+        ]
     
     // MARK: Resource Helpers
     static var resourceCategories: [LibraryResource.ResourceCategory] {

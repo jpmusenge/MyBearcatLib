@@ -18,6 +18,8 @@ struct HomeView: View {
     var onDatabasesTapped: () -> Void = {}
     var onMyBooksTapped: () -> Void = {}
     
+    @State private var showNotifications = false
+    
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
@@ -46,18 +48,24 @@ struct HomeView: View {
                         .foregroundColor(Theme.Colors.primary)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {}) {
+                    Button(action: {
+                        showNotifications = true
+                    }) {
                         Image(systemName: "bell")
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(Theme.Colors.textPrimary)
                             .overlay(alignment: .topTrailing) {
+                                // little gold notifications dot
                                 Circle()
-                                    .fill(Theme.Colors.accent) // Using the gold accent for notifications
+                                    .fill(Theme.Colors.accent)
                                     .frame(width: 10, height: 10)
                                     .offset(x: 2, y: -2)
                             }
                     }
                 }
+            }
+            .sheet(isPresented: $showNotifications) {
+                NotificationsView()
             }
         }
     }
