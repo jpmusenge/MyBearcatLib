@@ -43,6 +43,17 @@ enum Theme {
         static let availableText = Color(hex: "166534")    // Dark green text
         static let checkedOutBg = Color(hex: "FEE2E2")    // Light red background
         static let checkedOutText = Color(hex: "991B1B")   // Dark red text
+        
+        // Dark mode variants
+        static let backgroundDark = Color(hex: "111318")
+        static let surfaceDark = Color(hex: "1C1E26")
+        static let surfaceSecondaryDark = Color(hex: "252833")
+        static let textPrimaryDark = Color(hex: "E8EAF0")
+        static let textSecondaryDark = Color(hex: "8B90AD")
+        static let availableBgDark = Color(hex: "14532D")
+        static let availableTextDark = Color(hex: "86EFAC")
+        static let checkedOutBgDark = Color(hex: "7F1D1D")
+        static let checkedOutTextDark = Color(hex: "FCA5A5")
     }
     
     // MARK: Fonts
@@ -65,6 +76,40 @@ enum Theme {
         static let cornerRadius: CGFloat = 12
         static let cornerRadiusSmall: CGFloat = 8
         static let cardShadowRadius: CGFloat = 8
+    }
+    
+    // MARK: - Adaptive Color Helper
+    enum AdaptiveColors {
+        static func background(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.backgroundDark : Theme.Colors.background
+        }
+        static func surface(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.surfaceDark : Theme.Colors.surface
+        }
+        static func surfaceSecondary(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.surfaceSecondaryDark : Theme.Colors.surfaceSecondary
+        }
+        static func textPrimary(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.textPrimaryDark : Theme.Colors.textPrimary
+        }
+        static func textSecondary(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.textSecondaryDark : Theme.Colors.textSecondary
+        }
+        static func availableBg(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.availableBgDark : Theme.Colors.availableBg
+        }
+        static func availableText(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.availableTextDark : Theme.Colors.availableText
+        }
+        static func checkedOutBg(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.checkedOutBgDark : Theme.Colors.checkedOutBg
+        }
+        static func checkedOutText(_ isDark: Bool) -> Color {
+            isDark ? Theme.Colors.checkedOutTextDark : Theme.Colors.checkedOutText
+        }
+        static func cardShadow(_ isDark: Bool) -> Color {
+            isDark ? Color.clear : Theme.Colors.textPrimary.opacity(0.04)
+        }
     }
 }
 
