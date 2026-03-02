@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var settings: AppSettings
     
     // Track which tab is selected. Starts on "browse"
     @State private var selectedTab = "home"
@@ -69,4 +70,5 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environmentObject(AppSettings())
 }

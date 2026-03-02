@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct BearcatLibApp: App {
+    @StateObject private var settings = AppSettings()
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()
+            .environmentObject(settings)
+            .preferredColorScheme(settings.isDarkMode ? .dark : .light)
         }
     }
 }

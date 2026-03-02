@@ -36,6 +36,7 @@
 				Assets.xcassets,
 				BearcatLibApp.swift,
 				Models/Book.swift,
+				Utilities/AppSettings.swift,
 				Utilities/SampleData.swift,
 				Utilities/Theme.swift,
 				Views/BookCardView.swift,

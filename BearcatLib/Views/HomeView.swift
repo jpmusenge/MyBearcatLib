@@ -12,6 +12,8 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @EnvironmentObject var settings: AppSettings
+    
     // Actions passed in from MainTabView
     var onSearchTapped: () -> Void = {}
     var onReserveTapped: () -> Void = {}
@@ -19,6 +21,8 @@ struct HomeView: View {
     var onMyBooksTapped: () -> Void = {}
     
     @State private var showNotifications = false
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         NavigationStack {
@@ -39,7 +43,7 @@ struct HomeView: View {
                 }
                 .padding(.top, 16)
             }
-            .background(Theme.Colors.background.ignoresSafeArea())
+            .background(AdaptiveColors.background(dk).ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -75,11 +79,11 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Hey, Joseph")
                 .font(Theme.Fonts.headline)
-                .foregroundColor(Theme.Colors.textSecondary)
+                .foregroundColor(AdaptiveColors.textSecondary(dk))
             
             Text("What do you need\nfrom the library?")
                 .font(Theme.Fonts.largeTitle)
-                .foregroundColor(Theme.Colors.textPrimary)
+                .foregroundColor(AdaptiveColors.textPrimary(dk))
                 .lineSpacing(2)
             
             HStack(spacing: 6) {
@@ -88,7 +92,7 @@ struct HomeView: View {
                     .frame(width: 8, height: 8)
                 Text("Leontyne Price Library is Open · Closes at 9:00 PM")
                     .font(Theme.Fonts.caption)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
             }
             .padding(.top, 4)
         }
@@ -106,13 +110,13 @@ struct HomeView: View {
                 
                 Text("Search titles, authors, or ISBN...")
                     .font(Theme.Fonts.body)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                 Spacer()
             }
             .padding(Theme.Layout.paddingMedium)
             .background(Theme.Colors.surface)
             .cornerRadius(Theme.Layout.cornerRadius)
-            .shadow(color: Theme.Colors.textPrimary.opacity(0.04), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
+            .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
         }
         .padding(.horizontal, Theme.Layout.paddingLarge)
     }
@@ -364,4 +368,5 @@ struct ModernBookCard: View {
 
 #Preview {
     HomeView()
+        .environmentObject(AppSettings())
 }
