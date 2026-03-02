@@ -54,7 +54,7 @@ struct MainTabView: View {
                 .tag("mybooks")
             
             // Tab 3: Profile
-            Text("Profile — Coming Soon!")
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person.crop.circle")
                     Text("Profile")

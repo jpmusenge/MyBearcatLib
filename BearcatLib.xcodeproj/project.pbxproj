@@ -46,6 +46,7 @@
 				Views/MainTabView.swift,
 				Views/MyBooksView.swift,
 				Views/NotificationsView.swift,
+				Views/ProfileView.swift,
 				Views/SearchView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
@@ -68,6 +69,7 @@
 				Views/MainTabView.swift,
 				Views/MyBooksView.swift,
 				Views/NotificationsView.swift,
+				Views/ProfileView.swift,
 				Views/SearchView.swift,
 			);
 			target = 3A199E092F42E19A0030AC0C /* BearcatLibTests */;
