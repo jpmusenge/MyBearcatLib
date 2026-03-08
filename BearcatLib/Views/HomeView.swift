@@ -126,7 +126,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Quick Actions")
                 .font(Theme.Fonts.title2)
-                .foregroundColor(Theme.Colors.textPrimary)
+                .foregroundColor(AdaptiveColors.textPrimary(dk))
                 .padding(.horizontal, Theme.Layout.paddingLarge)
             
             HStack(spacing: 16) {
@@ -153,7 +153,7 @@ struct HomeView: View {
                     HStack {
                         Text("Due Soon")
                             .font(Theme.Fonts.title2)
-                            .foregroundColor(Theme.Colors.textPrimary)
+                            .foregroundColor(AdaptiveColors.textPrimary(dk))
                         Spacer()
                         Button("See all") {
                             onMyBooksTapped()
@@ -184,7 +184,7 @@ struct HomeView: View {
             HStack {
                 Text("Popular This Week")
                     .font(Theme.Fonts.title2)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                 Spacer()
                 Button("See all") {
                     onSearchTapped()
@@ -211,10 +211,14 @@ struct HomeView: View {
 // MARK: - Modern Components
 
 struct ModernQuickAction: View {
+    @EnvironmentObject var settings: AppSettings
+    
     let icon: String
     let title: String
     let useAccent: Bool
     var action: () -> Void
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         Button(action: action) {
@@ -222,17 +226,17 @@ struct ModernQuickAction: View {
                 // Soft background circle for the icon
                 ZStack {
                     Circle()
-                        .fill(useAccent ? Theme.Colors.accent.opacity(0.15) : Theme.Colors.primary.opacity(0.1))
+                        .fill(useAccent ? Theme.Colors.accent.opacity(0.15) : Theme.Colors.primary.opacity(dk ? 0.2 : 0.1))
                         .frame(width: 40, height: 40)
                     
                     Image(systemName: icon)
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(useAccent ? Theme.Colors.accent : Theme.Colors.primary)
+                        .foregroundColor(useAccent ? Theme.Colors.accent : (dk ? Theme.Colors.primaryLight : Theme.Colors.primary))
                 }
                 
                 Text(title)
                     .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                 
@@ -240,15 +244,18 @@ struct ModernQuickAction: View {
             }
             .padding(12)
             .frame(maxWidth: .infinity)
-            .background(Theme.Colors.surface)
+            .background(AdaptiveColors.surface(dk))
             .cornerRadius(Theme.Layout.cornerRadius)
-            .shadow(color: Theme.Colors.textPrimary.opacity(0.04), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
+            .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
         }
     }
 }
 
 struct ModernDueCard: View {
+    @EnvironmentObject var settings: AppSettings
     let book: Book // Assuming your Book struct is available
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var daysUntilDue: Int {
         guard let due = book.dueDate else { return 0 }
@@ -279,7 +286,7 @@ struct ModernDueCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(book.title)
                     .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                     .lineLimit(1)
                 
                 HStack(spacing: 6) {
@@ -298,14 +305,17 @@ struct ModernDueCard: View {
         }
         .padding(12)
         .frame(width: 240)
-        .background(Theme.Colors.surface)
+        .background(AdaptiveColors.surface(dk))
         .cornerRadius(Theme.Layout.cornerRadius)
-        .shadow(color: Theme.Colors.textPrimary.opacity(0.05), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
+        .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
     }
 }
 
 struct ModernBookCard: View {
+    @EnvironmentObject var settings: AppSettings
     let book: Book
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -330,25 +340,25 @@ struct ModernBookCard: View {
                             .font(.system(size: 10, weight: .bold))
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(Theme.Colors.availableBg)
-                            .foregroundColor(Theme.Colors.availableText)
+                            .background(AdaptiveColors.availableBg(dk))
+                            .foregroundColor(AdaptiveColors.availableText(dk))
                             .clipShape(Capsule())
                             .padding(8)
                     }
                     Spacer()
                 }
             }
-            .shadow(color: Theme.Colors.textPrimary.opacity(0.08), radius: 6, x: 0, y: 3)
+            .shadow(color: AdaptiveColors.cardShadow(dk).opacity(dk ? 0 : 0.08), radius: 6, x: 0, y: 3)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(book.title)
                     .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                     .lineLimit(1)
                 
                 Text(book.author)
                     .font(Theme.Fonts.caption)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                     .lineLimit(1)
                 
                 // Directly addressing the shelf location pain point
