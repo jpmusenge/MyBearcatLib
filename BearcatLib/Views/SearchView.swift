@@ -12,8 +12,12 @@ import SwiftUI
 
 struct SearchView: View {
     
+    @EnvironmentObject var settings: AppSettings
+    
     @State private var searchText = ""
     @State private var selectedGenre: String? = nil
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var filteredBooks: [Book] {
         var results = SampleData.books
@@ -50,7 +54,7 @@ struct SearchView: View {
                             HStack {
                                 Text("\(filteredBooks.count) \(filteredBooks.count == 1 ? "result" : "results")")
                                     .font(Theme.Fonts.subheadline)
-                                    .foregroundColor(Theme.Colors.textSecondary)
+                                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                                 Spacer()
                             }
                             .padding(.horizontal, Theme.Layout.paddingLarge)
@@ -61,6 +65,7 @@ struct SearchView: View {
                                 ForEach(filteredBooks, id: \.isbn) { book in
                                     NavigationLink(value: book) {
                                         ModernBookListRow(book: book)
+                                            .environmentObject(settings)
                                     }
                                     .buttonStyle(.plain)
                                 }
@@ -71,12 +76,13 @@ struct SearchView: View {
                     }
                 }
             }
-            .background(Theme.Colors.background.ignoresSafeArea())
+            .background(AdaptiveColors.background(dk).ignoresSafeArea())
             // Native iOS Search Bar
             .searchable(text: $searchText, prompt: "Search titles, authors, or ISBN...")
             .navigationTitle("Search Catalog")
             .navigationDestination(for: Book.self) { book in
                 BookDetailView(book: book)
+                    .environmentObject(settings)
             }
         }
     }
@@ -90,6 +96,7 @@ struct SearchView: View {
                     isSelected: selectedGenre == nil,
                     action: { selectedGenre = nil }
                 )
+                .environmentObject(settings)
                 
                 ForEach(SampleData.genres, id: \.self) { genre in
                     GenreChip(
@@ -100,6 +107,7 @@ struct SearchView: View {
                             selectedGenre = selectedGenre == genre ? nil : genre
                         }
                     )
+                    .environmentObject(settings)
                 }
             }
             .padding(.horizontal, Theme.Layout.paddingLarge)
@@ -107,7 +115,7 @@ struct SearchView: View {
         }
         .background(Theme.Colors.surface)
         // Add a subtle shadow separating the filters from the scrolling content
-        .shadow(color: Theme.Colors.textPrimary.opacity(0.03), radius: 3, x: 0, y: 3)
+        .shadow(color: AdaptiveColors.cardShadow(dk), radius: 3, x: 0, y: 3)
         .zIndex(1) // Ensures shadow renders over the scrollview
     }
     
@@ -118,15 +126,15 @@ struct SearchView: View {
             
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 48))
-                .foregroundColor(Theme.Colors.textSecondary.opacity(0.5))
+                .foregroundColor(AdaptiveColors.textSecondary(dk).opacity(0.5))
             
             Text("No books found")
                 .font(Theme.Fonts.title2)
-                .foregroundColor(Theme.Colors.textPrimary)
+                .foregroundColor(AdaptiveColors.textPrimary(dk))
             
             Text("Try adjusting your search or\nselecting a different genre.")
                 .font(Theme.Fonts.body)
-                .foregroundColor(Theme.Colors.textSecondary)
+                .foregroundColor(AdaptiveColors.textSecondary(dk))
                 .multilineTextAlignment(.center)
             
             Spacer()
@@ -137,26 +145,29 @@ struct SearchView: View {
 
 // MARK: - Genre Chip Component
 struct GenreChip: View {
+    @EnvironmentObject var settings: AppSettings
     let title: String
     let isSelected: Bool
     let action: () -> Void
+    
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         Button(action: action) {
             Text(title)
                 .font(Theme.Fonts.subheadline)
                 .fontWeight(isSelected ? .semibold : .medium)
-                .foregroundColor(isSelected ? Theme.Colors.textOnPrimary : Theme.Colors.textPrimary)
+                .foregroundColor(isSelected ? Theme.Colors.textOnPrimary : AdaptiveColors.textPrimary(dk))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(
                     Capsule()
-                        .fill(isSelected ? Theme.Colors.primary : Theme.Colors.surfaceSecondary)
+                        .fill(isSelected ? Theme.Colors.primary : AdaptiveColors.surfaceSecondary(dk))
                 )
                 // Add a very subtle outline to unselected chips
                 .overlay(
                     Capsule()
-                        .strokeBorder(Theme.Colors.textSecondary.opacity(0.1), lineWidth: isSelected ? 0 : 1)
+                        .strokeBorder(AdaptiveColors.textSecondary(dk).opacity(0.1), lineWidth: isSelected ? 0 : 1)
                 )
         }
     }
@@ -164,7 +175,9 @@ struct GenreChip: View {
 
 // MARK: - Modern List Row
 struct ModernBookListRow: View {
+    @EnvironmentObject var settings: AppSettings
     let book: Book
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         HStack(spacing: 16) {
@@ -178,19 +191,19 @@ struct ModernBookListRow: View {
                     .font(.system(size: 24, weight: .bold, design: .serif))
                     .foregroundColor(Theme.Colors.textOnPrimary.opacity(0.3))
             }
-            .shadow(color: Theme.Colors.textPrimary.opacity(0.08), radius: 4, x: 0, y: 2)
+            .shadow(color: AdaptiveColors.cardShadow(dk).opacity(0.08), radius: 4, x: 0, y: 2)
             
             // Book Details
             VStack(alignment: .leading, spacing: 6) {
                 Text(book.title)
                     .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true) // Prevents truncation if possible
                 
                 Text(book.author)
                     .font(Theme.Fonts.subheadline)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                     .lineLimit(1)
                 
                 Spacer()
@@ -201,8 +214,8 @@ struct ModernBookListRow: View {
                         .font(.system(size: 11, weight: .bold))
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(book.isAvailable ? Theme.Colors.availableBg : Theme.Colors.checkedOutBg)
-                        .foregroundColor(book.isAvailable ? Theme.Colors.availableText : Theme.Colors.checkedOutText)
+                        .background(book.isAvailable ? AdaptiveColors.availableBg(dk) : AdaptiveColors.checkedOutBg(dk))
+                        .foregroundColor(book.isAvailable ? AdaptiveColors.availableText(dk) : AdaptiveColors.checkedOutText(dk))
                         .clipShape(Capsule())
                     
                     Spacer()
@@ -220,12 +233,13 @@ struct ModernBookListRow: View {
             .frame(height: 100) // Match cover height
         }
         .padding(Theme.Layout.paddingMedium)
-        .background(Theme.Colors.surface)
+        .background(AdaptiveColors.surface(dk))
         .cornerRadius(Theme.Layout.cornerRadius)
-        .shadow(color: Theme.Colors.textPrimary.opacity(0.04), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
+        .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
     }
 }
 
 #Preview {
     SearchView()
+        .environmentObject(AppSettings())
 }

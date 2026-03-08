@@ -7,12 +7,14 @@
 import SwiftUI
 
 struct MyBooksView: View {
+    @EnvironmentObject var settings: AppSettings
     let checkedOutBooks = SampleData.checkedOutBooks
+    private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Theme.Colors.background.ignoresSafeArea()
+                AdaptiveColors.background(dk).ignoresSafeArea()
                 
                 if checkedOutBooks.isEmpty {
                     emptyStateView
@@ -99,14 +101,14 @@ struct MyBooksView: View {
                 
                 ForEach(overdueBooks, id: \.isbn) { book in
                     NavigationLink(value: book) {
-                        ModernCheckedOutRow(book: book)
+                        ModernCheckedOutRow(book: book).environmentObject(settings)
                     }
                     .buttonStyle(.plain)
                 }
                 .padding(.horizontal, Theme.Layout.paddingLarge)
             }
             .navigationDestination(for: Book.self) { book in
-                BookDetailView(book: book)
+                BookDetailView(book: book).environmentObject(settings)
             }
         }
     }
@@ -123,7 +125,7 @@ struct MyBooksView: View {
                 
                 ForEach(dueSoon, id: \.isbn) { book in
                     NavigationLink(value: book) {
-                        ModernCheckedOutRow(book: book)
+                        ModernCheckedOutRow(book: book).environmentObject(settings)
                     }
                     .buttonStyle(.plain)
                 }
@@ -144,7 +146,7 @@ struct MyBooksView: View {
                     
                     ForEach(safeBooks, id: \.isbn) { book in
                         NavigationLink(value: book) {
-                            ModernCheckedOutRow(book: book)
+                            ModernCheckedOutRow(book: book).environmentObject(settings)
                         }
                         .buttonStyle(.plain)
                     }
@@ -161,22 +163,18 @@ struct MyBooksView: View {
             
             ZStack {
                 Circle()
-                    .fill(Theme.Colors.primary.opacity(0.1))
-                    .frame(width: 120, height: 120)
+                    .fill(Theme.Colors.primary.opacity(dk ? 0.2 : 0.1)).frame(width: 120, height: 120)
                 
-                Image(systemName: "books.vertical")
-                    .font(.system(size: 50))
-                    .foregroundColor(Theme.Colors.primary)
+                Image(systemName: "books.vertical").font(.system(size: 50)).foregroundColor(dk ? Theme.Colors.primaryLight : Theme.Colors.primary)
             }
-            
             VStack(spacing: 8) {
                 Text("No books checked out")
                     .font(Theme.Fonts.title2)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                 
                 Text("Your borrowed books and their due dates will appear here.")
                     .font(Theme.Fonts.body)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 40)
@@ -232,6 +230,8 @@ private struct SummaryMetric: View {
 }
 
 private struct SectionHeader: View {
+    @EnvironmentObject var settings: AppSettings
+
     let title: String
     let icon: String
     let color: Color
@@ -244,7 +244,7 @@ private struct SectionHeader: View {
             
             Text(title)
                 .font(Theme.Fonts.title2)
-                .foregroundColor(Theme.Colors.textPrimary)
+                .foregroundColor(AdaptiveColors.textPrimary(settings.isDarkMode))
             
             Spacer()
         }
@@ -253,8 +253,9 @@ private struct SectionHeader: View {
 }
 
 struct ModernCheckedOutRow: View {
+    @EnvironmentObject var settings: AppSettings
     let book: Book
-    
+    private var dk: Bool { settings.isDarkMode }
     private var daysUntilDue: Int {
         guard let due = book.dueDate else { return 0 }
         return Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: Date()), to: Calendar.current.startOfDay(for: due)).day ?? 0
@@ -277,23 +278,23 @@ struct ModernCheckedOutRow: View {
         HStack(spacing: 16) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Theme.Colors.surfaceSecondary)
+                    .fill(AdaptiveColors.surfaceSecondary(dk))
                     .frame(width: 50, height: 75)
                 
                 Text(book.title.prefix(1))
                     .font(.system(size: 24, weight: .bold, design: .serif))
-                    .foregroundColor(Theme.Colors.textSecondary.opacity(0.5))
+                    .foregroundColor(AdaptiveColors.textSecondary(dk).opacity(0.5))
             }
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(book.title)
                     .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .foregroundColor(AdaptiveColors.textPrimary(dk))
                     .lineLimit(1)
                 
                 Text(book.author)
                     .font(Theme.Fonts.caption)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(AdaptiveColors.textSecondary(dk))
                     .lineLimit(1)
                 
                 Text(statusText)
@@ -318,12 +319,13 @@ struct ModernCheckedOutRow: View {
             }
         }
         .padding(16)
-        .background(Theme.Colors.surface)
+        .background(AdaptiveColors.surface(dk))
         .cornerRadius(16)
-        .shadow(color: Theme.Colors.textPrimary.opacity(0.04), radius: 10, x: 0, y: 4)
+        .shadow(color: AdaptiveColors.cardShadow(dk), radius: 10, x: 0, y: 4)
     }
 }
 
 #Preview {
     MyBooksView()
+        .environmentObject(AppSettings())
 }
