@@ -13,7 +13,8 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var settings: AppSettings
-    
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     // Actions passed in from MainTabView
     var onSearchTapped: () -> Void = {}
     var onReserveTapped: () -> Void = {}
@@ -77,7 +78,7 @@ struct HomeView: View {
     // MARK: - Header Section
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Hey, Joseph")
+            Text("Hey, \(authViewModel.userFirstName)")
                 .font(Theme.Fonts.headline)
                 .foregroundColor(AdaptiveColors.textSecondary(dk))
             
@@ -379,4 +380,5 @@ struct ModernBookCard: View {
 #Preview {
     HomeView()
         .environmentObject(AppSettings())
+        .environmentObject(AuthViewModel())
 }

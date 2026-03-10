@@ -12,6 +12,7 @@ import SwiftUI
 struct ProfileView: View {
     
     // MARK: - State
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showSignOutAlert = false
     @State private var notificationsEnabled = true
     @State private var darkModeEnabled = false
@@ -43,7 +44,7 @@ struct ProfileView: View {
             .alert("Sign Out", isPresented: $showSignOutAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Sign Out", role: .destructive) {
-                    // Auth sign-out will go here later
+                    authViewModel.signOut()
                 }
             } message: {
                 Text("Are you sure you want to sign out of BearcatLib?")
@@ -66,13 +67,13 @@ struct ProfileView: View {
                         .stroke(Color.white.opacity(0.3), lineWidth: 2)
                         .frame(width: 72, height: 72)
                     
-                    Text("JM")
+                    Text(authViewModel.userInitials)
                         .font(.custom("AvenirNext-Bold", size: 26))
                         .foregroundColor(.white)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Joseph Musenge")
+                    Text(authViewModel.userDisplayName)
                         .font(Theme.Fonts.title2)
                         .foregroundColor(.white)
                     
@@ -170,7 +171,7 @@ struct ProfileView: View {
                 .padding(.horizontal, Theme.Layout.paddingLarge)
             
             VStack(spacing: 0) {
-                ProfileRow(icon: "envelope.fill", title: "Email", detail: "jmusenge@rustcollege.edu")
+                ProfileRow(icon: "envelope.fill", title: "Email", detail: authViewModel.userEmail)
                 
                 Divider().padding(.leading, 56)
                 
@@ -425,4 +426,5 @@ private struct ProfileNavigationRow: View {
 
 #Preview {
     ProfileView()
+        .environmentObject(AuthViewModel())
 }
