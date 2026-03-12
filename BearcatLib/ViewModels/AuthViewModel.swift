@@ -14,6 +14,7 @@ import FirebaseAuth
 // MARK: - Auth Flow
 
 enum AuthFlow {
+    case welcome
     case login
     case register
     case forgotPassword
@@ -32,7 +33,7 @@ final class AuthViewModel: ObservableObject {
 
     // MARK: - Navigation
 
-    @Published var currentFlow: AuthFlow = .login
+    @Published var currentFlow: AuthFlow = .welcome
 
     // MARK: - Login Form
 
@@ -233,6 +234,12 @@ final class AuthViewModel: ObservableObject {
 
     // MARK: - Navigation
 
+    func switchToWelcome() {
+        currentFlow = .welcome
+        errorMessage = nil
+        showError = false
+    }
+
     func switchToLogin() {
         currentFlow = .login
         errorMessage = nil
@@ -281,7 +288,7 @@ final class AuthViewModel: ObservableObject {
         clearRegisterForm()
         resetEmail = ""
         resetEmailSent = false
-        currentFlow = .login
+        currentFlow = .welcome
     }
 
     private func mapFirebaseError(_ error: Error) -> String {

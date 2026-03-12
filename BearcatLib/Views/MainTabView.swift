@@ -71,4 +71,5 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
         .environmentObject(AppSettings())
+        .environmentObject(AuthViewModel())
 }

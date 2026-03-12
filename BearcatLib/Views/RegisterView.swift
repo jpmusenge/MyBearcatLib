@@ -27,14 +27,9 @@ struct RegisterView: View {
             VStack(spacing: 32) {
 
                 // MARK: - Logo
-                VStack(spacing: 16) {
-                    BearcatLibLogo(size: 70)
-
-                    Text("BearcatLib")
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
-                        .foregroundColor(Theme.Colors.primary)
-                }
-                .padding(.top, 24)
+                BearcatLibLogo(showTitle: false)
+                    .scaleEffect(0.6)
+                    .padding(.top, 16)
 
                 // MARK: - Title
                 VStack(spacing: 6) {

@@ -27,18 +27,9 @@ struct LoginView: View {
             VStack(spacing: 32) {
 
                 // MARK: - Logo
-                VStack(spacing: 16) {
-                    BearcatLibLogo(size: 80)
-
-                    Text("BearcatLib")
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
-                        .foregroundColor(Theme.Colors.primary)
-
-                    Text("Leontyne Price Library")
-                        .font(Theme.Fonts.caption)
-                        .foregroundColor(AdaptiveColors.textSecondary(dk))
-                }
-                .padding(.top, 24)
+                BearcatLibLogo(showTitle: false)
+                    .scaleEffect(0.6)
+                    .padding(.top, 16)
 
                 // MARK: - Welcome Text
                 VStack(spacing: 6) {
