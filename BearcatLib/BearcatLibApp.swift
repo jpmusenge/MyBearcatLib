@@ -59,24 +59,18 @@ struct BearcatLibApp: App {
 
     private var launchScreen: some View {
         ZStack {
-            LinearGradient(
-                colors: [Theme.Colors.primaryLight, Theme.Colors.primaryDark],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            Theme.Colors.background
+                .ignoresSafeArea()
 
-            VStack(spacing: 16) {
-                Image(systemName: "building.columns.fill")
-                    .font(.system(size: 48))
-                    .foregroundColor(.white.opacity(0.8))
+            VStack(spacing: 20) {
+                BearcatLibLogo(size: 90)
 
                 Text("BearcatLib")
                     .font(.system(size: 28, weight: .heavy, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(Theme.Colors.primary)
 
                 ProgressView()
-                    .tint(.white)
+                    .tint(Theme.Colors.primary)
             }
         }
     }

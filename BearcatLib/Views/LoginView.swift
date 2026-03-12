@@ -26,11 +26,22 @@ struct LoginView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 32) {
 
-                // MARK: - Gradient Header
-                gradientHeader
+                // MARK: - Logo
+                VStack(spacing: 16) {
+                    BearcatLibLogo(size: 80)
+
+                    Text("BearcatLib")
+                        .font(.system(size: 28, weight: .heavy, design: .rounded))
+                        .foregroundColor(Theme.Colors.primary)
+
+                    Text("Leontyne Price Library")
+                        .font(Theme.Fonts.caption)
+                        .foregroundColor(AdaptiveColors.textSecondary(dk))
+                }
+                .padding(.top, 24)
 
                 // MARK: - Welcome Text
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     Text("Welcome Back")
                         .font(Theme.Fonts.title)
                         .foregroundColor(AdaptiveColors.textPrimary(dk))
@@ -166,42 +177,6 @@ struct LoginView: View {
         .background(AdaptiveColors.background(dk).ignoresSafeArea())
         .animation(.easeInOut(duration: 0.2), value: authViewModel.showError)
         .animation(.easeInOut(duration: 0.2), value: authViewModel.isValidLoginEmail)
-    }
-
-    // MARK: - Gradient Header
-
-    private var gradientHeader: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.15))
-                    .frame(width: 80, height: 80)
-
-                Image(systemName: "building.columns.fill")
-                    .font(.system(size: 36))
-                    .foregroundColor(.white)
-            }
-
-            Text("BearcatLib")
-                .font(.system(size: 28, weight: .heavy, design: .rounded))
-                .foregroundColor(.white)
-
-            Text("Leontyne Price Library")
-                .font(Theme.Fonts.subheadline)
-                .foregroundColor(.white.opacity(0.7))
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 40)
-        .background(
-            LinearGradient(
-                colors: [Theme.Colors.primaryLight, Theme.Colors.primaryDark],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(20)
-        .shadow(color: Theme.Colors.primary.opacity(0.3), radius: 15, x: 0, y: 8)
-        .padding(.horizontal, Theme.Layout.paddingLarge)
     }
 
     // MARK: - Error Banner
