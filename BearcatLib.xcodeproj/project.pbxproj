@@ -46,6 +46,7 @@
 				Models/Book.swift,
 				Services/AuthService.swift,
 				Utilities/AppSettings.swift,
+				Utilities/BearcatLibLogo.swift,
 				Utilities/SampleData.swift,
 				Utilities/Theme.swift,
 				ViewModels/AuthViewModel.swift,
