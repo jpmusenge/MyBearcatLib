@@ -48,9 +48,9 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Text("BearcatLib")
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
-                        .foregroundColor(Theme.Colors.primary)
+                    BearcatLibLogo(showTitle: false)
+                        .scaleEffect(0.35)
+                        .frame(width: 36, height: 36)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
