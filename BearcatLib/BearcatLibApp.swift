@@ -46,6 +46,8 @@ struct BearcatLibApp: App {
     @ViewBuilder
     private var authFlowView: some View {
         switch authViewModel.currentFlow {
+        case .welcome:
+            WelcomeView()
         case .login:
             LoginView()
         case .register:
@@ -62,12 +64,8 @@ struct BearcatLibApp: App {
             Theme.Colors.background
                 .ignoresSafeArea()
 
-            VStack(spacing: 20) {
-                BearcatLibLogo(size: 90)
-
-                Text("BearcatLib")
-                    .font(.system(size: 28, weight: .heavy, design: .rounded))
-                    .foregroundColor(Theme.Colors.primary)
+            VStack(spacing: 24) {
+                BearcatLibLogo(showTitle: true)
 
                 ProgressView()
                     .tint(Theme.Colors.primary)
