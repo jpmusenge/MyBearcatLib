@@ -298,8 +298,8 @@ final class AuthViewModel: ObservableObject {
         }
 
         switch AuthErrorCode(rawValue: nsError.code) {
-        case .wrongPassword:
-            return "Incorrect password. Please try again."
+        case .wrongPassword, .invalidCredential:
+            return "Invalid email or password. Please check your credentials and try again."
         case .userNotFound:
             return "No account found with this email. Please register first."
         case .emailAlreadyInUse:
