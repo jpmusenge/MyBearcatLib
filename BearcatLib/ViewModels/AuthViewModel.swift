@@ -8,6 +8,7 @@
 // PURPOSE: Central auth state management — form state, validation, Firebase integration
 
 import SwiftUI
+import Combine
 import FirebaseAuth
 
 // MARK: - Auth Flow

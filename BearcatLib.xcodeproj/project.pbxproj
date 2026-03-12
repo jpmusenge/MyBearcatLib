@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3ACC54B32F626B55006E576A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACC54B22F626B55006E576A /* FirebaseAuth */; };
+		3ACC54B52F626B55006E576A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACC54B42F626B55006E576A /* FirebaseCore */; };
+		3ACC54C62F627F92006E576A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC54C52F627F92006E576A /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3A199E0B2F42E19A0030AC0C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +33,7 @@
 		3A199DFD2F42E1980030AC0C /* BearcatLib.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearcatLib.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A199E0A2F42E19A0030AC0C /* BearcatLibTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearcatLibTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A199E142F42E19A0030AC0C /* BearcatLibUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearcatLibUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ACC54C52F627F92006E576A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -35,19 +42,25 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				BearcatLibApp.swift,
+				"GoogleService-Info.plist",
 				Models/Book.swift,
+				Services/AuthService.swift,
 				Utilities/AppSettings.swift,
 				Utilities/SampleData.swift,
 				Utilities/Theme.swift,
+				ViewModels/AuthViewModel.swift,
 				Views/BookCardView.swift,
 				Views/BookDetailView.swift,
 				Views/BookSearch/BookRowView.swift,
 				Views/DigitalResourcesView.swift,
+				Views/ForgotPasswordView.swift,
 				Views/HomeView.swift,
+				Views/LoginView.swift,
 				Views/MainTabView.swift,
 				Views/MyBooksView.swift,
 				Views/NotificationsView.swift,
 				Views/ProfileView.swift,
+				Views/RegisterView.swift,
 				Views/SearchView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
@@ -57,6 +70,7 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				BearcatLibApp.swift,
+				"GoogleService-Info.plist",
 			);
 			target = 3A199E132F42E19A0030AC0C /* BearcatLibUITests */;
 		};
@@ -105,6 +119,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ACC54B52F626B55006E576A /* FirebaseCore in Frameworks */,
+				3ACC54B32F626B55006E576A /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +148,7 @@
 				3A199E172F42E19A0030AC0C /* BearcatLibUITests */,
 				3A199DFE2F42E1980030AC0C /* Products */,
 				3A199E0D2F42E19A0030AC0C /* BearcatLibTests */,
+				3ACC54C52F627F92006E576A /* .gitignore */,
 			);
 			sourceTree = "<group>";
 		};
@@ -162,6 +179,8 @@
 			);
 			name = BearcatLib;
 			packageProductDependencies = (
+				3ACC54B22F626B55006E576A /* FirebaseAuth */,
+				3ACC54B42F626B55006E576A /* FirebaseCore */,
 			);
 			productName = BearcatLib;
 			productReference = 3A199DFD2F42E1980030AC0C /* BearcatLib.app */;
@@ -246,6 +265,9 @@
 			);
 			mainGroup = 3A199DF42F42E1980030AC0C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A199DFE2F42E1980030AC0C /* Products */;
 			projectDirPath = "";
@@ -263,6 +285,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ACC54C62F627F92006E576A /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,6 +644,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3ACC54B22F626B55006E576A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		3ACC54B42F626B55006E576A /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3A199DF52F42E1980030AC0C /* Project object */;
 }
