@@ -26,11 +26,18 @@ struct RegisterView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 32) {
 
-                // MARK: - Gradient Header
-                gradientHeader
+                // MARK: - Logo
+                VStack(spacing: 16) {
+                    BearcatLibLogo(size: 70)
+
+                    Text("BearcatLib")
+                        .font(.system(size: 28, weight: .heavy, design: .rounded))
+                        .foregroundColor(Theme.Colors.primary)
+                }
+                .padding(.top, 24)
 
                 // MARK: - Title
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     Text("Create Account")
                         .font(Theme.Fonts.title)
                         .foregroundColor(AdaptiveColors.textPrimary(dk))
@@ -231,42 +238,6 @@ struct RegisterView: View {
         .animation(.easeInOut(duration: 0.2), value: authViewModel.isValidRegisterEmail)
         .animation(.easeInOut(duration: 0.2), value: authViewModel.isPasswordStrong)
         .animation(.easeInOut(duration: 0.2), value: authViewModel.passwordsMatch)
-    }
-
-    // MARK: - Gradient Header
-
-    private var gradientHeader: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.15))
-                    .frame(width: 80, height: 80)
-
-                Image(systemName: "person.badge.plus")
-                    .font(.system(size: 36))
-                    .foregroundColor(.white)
-            }
-
-            Text("BearcatLib")
-                .font(.system(size: 28, weight: .heavy, design: .rounded))
-                .foregroundColor(.white)
-
-            Text("Leontyne Price Library")
-                .font(Theme.Fonts.subheadline)
-                .foregroundColor(.white.opacity(0.7))
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 40)
-        .background(
-            LinearGradient(
-                colors: [Theme.Colors.primaryLight, Theme.Colors.primaryDark],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(20)
-        .shadow(color: Theme.Colors.primary.opacity(0.3), radius: 15, x: 0, y: 8)
-        .padding(.horizontal, Theme.Layout.paddingLarge)
     }
 
     // MARK: - Error Banner
