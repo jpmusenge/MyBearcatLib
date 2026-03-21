@@ -63,6 +63,7 @@
 				Views/ProfileView.swift,
 				Views/RegisterView.swift,
 				Views/SearchView.swift,
+				Views/WelcomeView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
 		};

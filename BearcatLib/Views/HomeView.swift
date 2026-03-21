@@ -11,7 +11,6 @@ import Foundation
 import SwiftUI
 
 struct HomeView: View {
-    
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var authViewModel: AuthViewModel
 
@@ -22,45 +21,124 @@ struct HomeView: View {
     var onMyBooksTapped: () -> Void = {}
     
     @State private var showNotifications = false
-    
     private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
         NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 32) {
-                    // Hero & Status
-                    headerSection
-                    // Big Search Bar
-                    searchBarButton
-                    // Quick Actions Grid
-                    quickActionsSection
-                    // Due Soon (Urgent Alerts)
-                    dueSoonSection
-                    // Featured Books
-                    featuredBooksSection
-    
-                    Spacer().frame(height: 40)
+            List {
+                // MARK: - Welcome & Status Section
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Hey, \(authViewModel.userFirstName)")
+                            .font(.subheadline)
+                            .foregroundColor(AdaptiveColors.textSecondary(dk))
+                        
+                        Text("What do you need\nfrom the library?")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(AdaptiveColors.textPrimary(dk))
+                            .lineSpacing(2)
+                        
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(Theme.Colors.success)
+                                .frame(width: 8, height: 8)
+                            Text("Leontyne Price Library is Open · Closes at 9:00 PM")
+                                .font(.caption)
+                                .foregroundColor(AdaptiveColors.textSecondary(dk))
+                        }
+                        .padding(.top, 4)
+                    }
+                    .padding(.vertical, 8)
                 }
-                .padding(.top, 16)
+                .listRowBackground(AdaptiveColors.surface(dk))
+                
+                // MARK: - Search Section
+                Section {
+                    Button(action: onSearchTapped) {
+                        Label("Search titles, authors, or ISBN...", systemImage: "magnifyingglass")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .listRowBackground(AdaptiveColors.surface(dk))
+
+                // MARK: - Quick Actions Grid
+                Section("Quick Actions") {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                        // Hooked up to onReserveTapped
+                        Button(action: onReserveTapped) {
+                            HomeActionTile(title: "Reserve", icon: "bookmark.fill", color: Theme.Colors.primary)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button(action: {}) {
+                            HomeActionTile(title: "Scan ISBN", icon: "barcode.viewfinder", color: Theme.Colors.primary)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Hooked up to onDatabasesTapped
+                        Button(action: onDatabasesTapped) {
+                            HomeActionTile(title: "Databases", icon: "network", color: Theme.Colors.accent)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button(action: {}) {
+                            HomeActionTile(title: "Floor Map", icon: "map.fill", color: Theme.Colors.primary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.vertical, 8)
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+
+                // MARK: - Urgent Alerts (Due Soon)
+                let checkedOut = SampleData.checkedOutBooks
+                if !checkedOut.isEmpty {
+                    Section(header: Text("Due Soon")) {
+                        ForEach(checkedOut.prefix(2), id: \.isbn) { book in
+                            Button(action: onMyBooksTapped) {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(book.title)
+                                            .font(.subheadline)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(AdaptiveColors.textPrimary(dk))
+                                            .lineLimit(1)
+                                        
+                                        // Using standard Apple HIG warning colors
+                                        Text("Due in 2 days")
+                                            .font(.caption)
+                                            .foregroundColor(.orange)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
             }
-            .background(AdaptiveColors.background(dk).ignoresSafeArea())
+            .listStyle(.insetGrouped)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                // App Logo Restored to Top Left
+                ToolbarItem(placement: .topBarLeading) {
                     BearcatLibLogo(showTitle: false)
                         .scaleEffect(0.35)
                         .frame(width: 36, height: 36)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showNotifications = true
-                    }) {
+                
+                // Notifications Icon on Top Right
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showNotifications = true }) {
                         Image(systemName: "bell")
-                            .font(.system(size: 20, weight: .semibold))
+                            .symbolVariant(.fill)
                             .foregroundColor(Theme.Colors.textPrimary)
                             .overlay(alignment: .topTrailing) {
-                                // little gold notifications dot
                                 Circle()
                                     .fill(Theme.Colors.accent)
                                     .frame(width: 10, height: 10)
@@ -74,306 +152,31 @@ struct HomeView: View {
             }
         }
     }
-    
-    // MARK: - Header Section
-    private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Hey, \(authViewModel.userFirstName)")
-                .font(Theme.Fonts.headline)
-                .foregroundColor(AdaptiveColors.textSecondary(dk))
-            
-            Text("What do you need\nfrom the library?")
-                .font(Theme.Fonts.largeTitle)
-                .foregroundColor(AdaptiveColors.textPrimary(dk))
-                .lineSpacing(2)
-            
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(Theme.Colors.success)
-                    .frame(width: 8, height: 8)
-                Text("Leontyne Price Library is Open · Closes at 9:00 PM")
-                    .font(Theme.Fonts.caption)
-                    .foregroundColor(AdaptiveColors.textSecondary(dk))
-            }
-            .padding(.top, 4)
-        }
-        .padding(.horizontal, Theme.Layout.paddingLarge)
-    }
-    
-    // MARK: - Search Bar Button
-    private var searchBarButton: some View {
-        Button(action: onSearchTapped) {
-            // Navigate to Search
-            HStack(spacing: 12) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(Theme.Colors.primary) // Brand color for the search icon
-                
-                Text("Search titles, authors, or ISBN...")
-                    .font(Theme.Fonts.body)
-                    .foregroundColor(AdaptiveColors.textSecondary(dk))
-                Spacer()
-            }
-            .padding(Theme.Layout.paddingMedium)
-            .background(Theme.Colors.surface)
-            .cornerRadius(Theme.Layout.cornerRadius)
-            .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
-        }
-        .padding(.horizontal, Theme.Layout.paddingLarge)
-    }
-    
-    // MARK: - Quick Actions
-    private var quickActionsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Quick Actions")
-                .font(Theme.Fonts.title2)
-                .foregroundColor(AdaptiveColors.textPrimary(dk))
-                .padding(.horizontal, Theme.Layout.paddingLarge)
-            
-            HStack(spacing: 16) {
-                VStack(spacing: 16) {
-                    ModernQuickAction(icon: "bookmark.fill", title: "Reserve", useAccent: false, action: onReserveTapped)
-                    ModernQuickAction(icon: "network", title: "Databases", useAccent: true, action: onDatabasesTapped)
-                }
-                VStack(spacing: 16) {
-                    ModernQuickAction(icon: "barcode.viewfinder", title: "Scan ISBN", useAccent: false, action: {})
-                    ModernQuickAction(icon: "map.fill", title: "Floor Map", useAccent: false, action: {})
-                }
-            }
-            .padding(.horizontal, Theme.Layout.paddingLarge)
-        }
-    }
-    
-    // MARK: - Due Soon Section
-    private var dueSoonSection: some View {
-        let checkedOut = SampleData.checkedOutBooks
-        
-        return Group {
-            if !checkedOut.isEmpty {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Due Soon")
-                            .font(Theme.Fonts.title2)
-                            .foregroundColor(AdaptiveColors.textPrimary(dk))
-                        Spacer()
-                        Button("See all") {
-                            onMyBooksTapped()
-                        }
-                        .font(Theme.Fonts.subheadline)
-                        .foregroundColor(Theme.Colors.primary)
-                    }
-                    .padding(.horizontal, Theme.Layout.paddingLarge)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(checkedOut, id: \.isbn) { book in
-                                ModernDueCard(book: book)
-                            }
-                        }
-                        .padding(.horizontal, Theme.Layout.paddingLarge)
-                        .padding(.vertical, 8)
-                    }
-                    .padding(.vertical, -8)
-                }
-            }
-        }
-    }
-    
-    // MARK: - Featured Books Section
-    private var featuredBooksSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Popular This Week")
-                    .font(Theme.Fonts.title2)
-                    .foregroundColor(AdaptiveColors.textPrimary(dk))
-                Spacer()
-                Button("See all") {
-                    onSearchTapped()
-                }
-                .font(Theme.Fonts.subheadline)
-                .foregroundColor(Theme.Colors.primary)
-            }
-            .padding(.horizontal, Theme.Layout.paddingLarge)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(SampleData.availableBooks.prefix(5), id: \.isbn) { book in
-                        ModernBookCard(book: book)
-                    }
-                }
-                .padding(.horizontal, Theme.Layout.paddingLarge)
-                .padding(.vertical, 8)
-            }
-            .padding(.vertical, -8)
-        }
-    }
 }
 
-// MARK: - Modern Components
-
-struct ModernQuickAction: View {
+// Minimalist Grid Tile for Home
+struct HomeActionTile: View {
     @EnvironmentObject var settings: AppSettings
-    
-    let icon: String
     let title: String
-    let useAccent: Bool
-    var action: () -> Void
-    
-    private var dk: Bool { settings.isDarkMode }
+    let icon: String
+    let color: Color
     
     var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                // Soft background circle for the icon
-                ZStack {
-                    Circle()
-                        .fill(useAccent ? Theme.Colors.accent.opacity(0.15) : Theme.Colors.primary.opacity(dk ? 0.2 : 0.1))
-                        .frame(width: 40, height: 40)
-                    
-                    Image(systemName: icon)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(useAccent ? Theme.Colors.accent : (dk ? Theme.Colors.primaryLight : Theme.Colors.primary))
-                }
-                
-                Text(title)
-                    .font(Theme.Fonts.headline)
-                    .foregroundColor(AdaptiveColors.textPrimary(dk))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                
-                Spacer()
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity)
-            .background(AdaptiveColors.surface(dk))
-            .cornerRadius(Theme.Layout.cornerRadius)
-            .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
-        }
-    }
-}
-
-struct ModernDueCard: View {
-    @EnvironmentObject var settings: AppSettings
-    let book: Book // Assuming your Book struct is available
-    
-    private var dk: Bool { settings.isDarkMode }
-    
-    var daysUntilDue: Int {
-        guard let due = book.dueDate else { return 0 }
-        return Calendar.current.dateComponents([.day], from: Date(), to: due).day ?? 0
-    }
-    
-    var isOverdue: Bool { daysUntilDue < 0 }
-    
-    var statusColor: Color {
-        if isOverdue { return Theme.Colors.error }
-        if daysUntilDue <= 2 { return Theme.Colors.warning }
-        return Theme.Colors.success
-    }
-    
-    var statusText: String {
-        if isOverdue { return "Overdue by \(abs(daysUntilDue)) days" }
-        if daysUntilDue == 0 { return "Due today" }
-        return "Due in \(daysUntilDue) days"
-    }
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            RoundedRectangle(cornerRadius: 4)
-                .fill(statusColor)
-                .frame(width: 4)
-                .padding(.vertical, 4)
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
             
-            VStack(alignment: .leading, spacing: 8) {
-                Text(book.title)
-                    .font(Theme.Fonts.headline)
-                    .foregroundColor(AdaptiveColors.textPrimary(dk))
-                    .lineLimit(1)
-                
-                HStack(spacing: 6) {
-                    Image(systemName: isOverdue ? "exclamationmark.triangle.fill" : "clock.fill")
-                        .font(.system(size: 12))
-                    Text(statusText)
-                        .font(Theme.Fonts.caption)
-                }
-                .foregroundColor(statusColor)
-                .padding(.vertical, 6)
-                .padding(.horizontal, 10)
-                .background(statusColor.opacity(0.1))
-                .cornerRadius(6)
-            }
-            Spacer()
+            Text(title)
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundColor(AdaptiveColors.textPrimary(settings.isDarkMode))
         }
-        .padding(12)
-        .frame(width: 240)
-        .background(AdaptiveColors.surface(dk))
-        .cornerRadius(Theme.Layout.cornerRadius)
-        .shadow(color: AdaptiveColors.cardShadow(dk), radius: Theme.Layout.cardShadowRadius, x: 0, y: 4)
-    }
-}
-
-struct ModernBookCard: View {
-    @EnvironmentObject var settings: AppSettings
-    let book: Book
-    
-    private var dk: Bool { settings.isDarkMode }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Placeholder for actual book cover
-            ZStack {
-                RoundedRectangle(cornerRadius: Theme.Layout.cornerRadiusSmall)
-                    .fill(Theme.Colors.primaryDark)
-                    .frame(width: 140, height: 200)
-                
-                // Subtle overlay pattern or text for the placeholder
-                VStack {
-                    Text(book.title.prefix(1))
-                        .font(.system(size: 40, weight: .bold, design: .serif))
-                        .foregroundColor(Theme.Colors.textOnPrimary.opacity(0.2))
-                }
-                
-                // Availability Badge
-                VStack {
-                    HStack {
-                        Spacer()
-                        Text("Available")
-                            .font(.system(size: 10, weight: .bold))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(AdaptiveColors.availableBg(dk))
-                            .foregroundColor(AdaptiveColors.availableText(dk))
-                            .clipShape(Capsule())
-                            .padding(8)
-                    }
-                    Spacer()
-                }
-            }
-            .shadow(color: AdaptiveColors.cardShadow(dk).opacity(dk ? 0 : 0.08), radius: 6, x: 0, y: 3)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(book.title)
-                    .font(Theme.Fonts.headline)
-                    .foregroundColor(AdaptiveColors.textPrimary(dk))
-                    .lineLimit(1)
-                
-                Text(book.author)
-                    .font(Theme.Fonts.caption)
-                    .foregroundColor(AdaptiveColors.textSecondary(dk))
-                    .lineLimit(1)
-                
-                // Directly addressing the shelf location pain point
-                HStack(spacing: 4) {
-                    Image(systemName: "mappin.and.ellipse")
-                        .font(.system(size: 10))
-                    Text("Floor \(book.floor), \(book.section)-\(book.aisle)")
-                        .font(.system(size: 11, weight: .medium))
-                }
-                .foregroundColor(Theme.Colors.accent)
-                .padding(.top, 4)
-            }
-            .frame(width: 140, alignment: .leading)
-        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+        .background(AdaptiveColors.surface(settings.isDarkMode))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
 }
 
