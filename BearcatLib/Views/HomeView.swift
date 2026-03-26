@@ -13,6 +13,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var bookService: BookService
 
     // Actions passed in from MainTabView
     var onSearchTapped: () -> Void = {}
@@ -93,10 +94,10 @@ struct HomeView: View {
                 .listRowInsets(EdgeInsets())
 
                 // MARK: - Urgent Alerts (Due Soon)
-                let checkedOut = SampleData.checkedOutBooks
+                let checkedOut = bookService.checkedOutBooks
                 if !checkedOut.isEmpty {
                     Section(header: Text("Due Soon")) {
-                        ForEach(checkedOut.prefix(2), id: \.isbn) { book in
+                        ForEach(checkedOut.prefix(2)) { book in
                             Button(action: onMyBooksTapped) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
@@ -107,9 +108,9 @@ struct HomeView: View {
                                             .lineLimit(1)
                                         
                                         // Using standard Apple HIG warning colors
-                                        Text("Due in 2 days")
+                                        Text(book.formattedDueDate ?? "Due soon")
                                             .font(.caption)
-                                            .foregroundColor(.orange)
+                                            .foregroundColor(book.isOverdue ? .red : .orange)
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.right")
@@ -184,4 +185,5 @@ struct HomeActionTile: View {
     HomeView()
         .environmentObject(AppSettings())
         .environmentObject(AuthViewModel())
+        .environmentObject(BookService.shared) 
 }

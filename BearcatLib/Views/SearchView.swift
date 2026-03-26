@@ -12,6 +12,7 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var bookService: BookService
     
     @State private var searchText = ""
     @State private var selectedGenre: String = "All"
@@ -20,28 +21,32 @@ struct SearchView: View {
     
     // Create an array that includes "All" at the beginning for the filter bar
     private var filterOptions: [String] {
-        ["All"] + SampleData.genres
+        ["All"] + bookService.genres
     }
     
     var filteredBooks: [Book] {
-        var results = SampleData.books
-        
-        // 1. Filter by Genre
-        if selectedGenre != "All" {
-            results = results.filter { $0.genre == selectedGenre }
-        }
-        
-        // 2. Filter by Search Text
-        if !searchText.isEmpty {
-            results = results.filter { book in
-                book.title.localizedCaseInsensitiveContains(searchText) ||
-                book.author.localizedCaseInsensitiveContains(searchText) ||
-                book.isbn.contains(searchText)
-            }
-        }
-        
-        return results
+        bookService.filter(genre: selectedGenre, searchText: searchText)
     }
+    
+//    var filteredBooks: [Book] {
+//        var results = SampleData.books
+//        
+//        // 1. Filter by Genre
+//        if selectedGenre != "All" {
+//            results = results.filter { $0.genre == selectedGenre }
+//        }
+//        
+//        // 2. Filter by Search Text
+//        if !searchText.isEmpty {
+//            results = results.filter { book in
+//                book.title.localizedCaseInsensitiveContains(searchText) ||
+//                book.author.localizedCaseInsensitiveContains(searchText) ||
+//                book.isbn.contains(searchText)
+//            }
+//        }
+//        
+//        return results
+//    }
     
     var body: some View {
         NavigationStack {
@@ -164,4 +169,5 @@ struct StandardBookRow: View {
 #Preview {
     SearchView()
         .environmentObject(AppSettings())
+        .environmentObject(BookService.shared)
 }
