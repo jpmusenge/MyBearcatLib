@@ -74,4 +74,5 @@ struct MainTabView: View {
         .environmentObject(AppSettings())
         .environmentObject(AuthViewModel())
         .environmentObject(BookService.shared)
+        .environmentObject(CheckoutService.shared)
 }

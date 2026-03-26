@@ -11,10 +11,12 @@ import SwiftUI
 struct BookDetailView: View {
     let book: Book
     @Environment(\.dismiss) private var dismiss
-    
-    // State for a fake reservation loading effect
-    @State private var isReserving = false
+    @EnvironmentObject var checkoutService: CheckoutService
+
+    @State private var isCheckingOut = false
     @State private var showSuccessAlert = false
+    @State private var showErrorAlert = false
+    @State private var errorText = ""
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -46,10 +48,15 @@ struct BookDetailView: View {
         .background(Theme.Colors.background.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         // Hide the default back button to use our own custom one, or keep it standard
-        .alert("Reservation Confirmed", isPresented: $showSuccessAlert) {
+        .alert("Book Checked Out", isPresented: $showSuccessAlert) {
             Button("OK", role: .cancel) { dismiss() }
         } message: {
-            Text("Your book has been reserved. You have 48 hours to pick it up at the front desk.")
+            Text("You've checked out this book. It's due in 14 days. You can view it in My Books.")
+        }
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK") {}
+        } message: {
+            Text(errorText)
         }
     }
     
@@ -131,20 +138,15 @@ struct BookDetailView: View {
     private var actionSection: some View {
         VStack {
             Button(action: {
-                // Simulate a network request
-                isReserving = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    isReserving = false
-                    showSuccessAlert = true
-                }
+                checkoutBook()
             }) {
                 HStack {
-                    if isReserving {
+                    if isCheckingOut {
                         ProgressView()
                             .tint(.white)
                     } else {
-                        Image(systemName: "bookmark.fill")
-                        Text(book.isAvailable ? "Reserve for Pickup" : "Join Waitlist")
+                        Image(systemName: book.isAvailable ? "book.fill" : "clock.fill")
+                        Text(book.isAvailable ? "Check Out" : "Currently Unavailable")
                     }
                 }
                 .font(.system(size: 18, weight: .bold))
@@ -157,9 +159,23 @@ struct BookDetailView: View {
                 )
                 .shadow(color: (book.isAvailable ? Theme.Colors.primary : Color.clear).opacity(0.3), radius: 10, x: 0, y: 4)
             }
-            .disabled(!book.isAvailable || isReserving) // Optional: disable if checked out
+            .disabled(!book.isAvailable || isCheckingOut)
         }
         .padding(.horizontal, Theme.Layout.paddingLarge)
+    }
+
+    private func checkoutBook() {
+        isCheckingOut = true
+        Task {
+            do {
+                try await checkoutService.checkoutBook(book)
+                showSuccessAlert = true
+            } catch {
+                errorText = error.localizedDescription
+                showErrorAlert = true
+            }
+            isCheckingOut = false
+        }
     }
     
     private var locationCard: some View {
@@ -297,5 +313,7 @@ struct MetadataRow: View {
 #Preview {
     NavigationStack {
         BookDetailView(book: SampleData.books[0])
+            .environmentObject(AppSettings())
+            .environmentObject(CheckoutService.shared)
     }
 }

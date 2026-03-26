@@ -16,6 +16,7 @@ struct BearcatLibApp: App {
     @StateObject private var settings = AppSettings()
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var bookService = BookService.shared
+    @StateObject private var checkoutService = CheckoutService.shared
 
     init() {
         FirebaseApp.configure()
@@ -31,8 +32,10 @@ struct BearcatLibApp: App {
                         .environmentObject(settings)
                         .environmentObject(authViewModel)
                         .environmentObject(bookService)
+                        .environmentObject(checkoutService)
                         .onAppear {
                             bookService.startListening()
+                            checkoutService.startListening()
                         }
                 } else {
                     authFlowView
@@ -46,6 +49,7 @@ struct BearcatLibApp: App {
             .onChange(of: authViewModel.isAuthenticated) { _, isAuth in
                 if !isAuth {
                     bookService.stopListening()
+                    checkoutService.stopListening()
                 }
             }
         }
