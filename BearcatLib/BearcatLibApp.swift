@@ -15,6 +15,7 @@ import FirebaseCore
 struct BearcatLibApp: App {
     @StateObject private var settings = AppSettings()
     @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var bookService = BookService.shared
 
     init() {
         FirebaseApp.configure()
@@ -29,6 +30,10 @@ struct BearcatLibApp: App {
                     MainTabView()
                         .environmentObject(settings)
                         .environmentObject(authViewModel)
+                        .environmentObject(bookService)
+                        .onAppear {
+                            bookService.startListening()
+                        }
                 } else {
                     authFlowView
                         .environmentObject(settings)
@@ -38,6 +43,11 @@ struct BearcatLibApp: App {
             .preferredColorScheme(settings.isDarkMode ? .dark : .light)
             .animation(.easeInOut(duration: 0.3), value: authViewModel.isAuthenticated)
             .animation(.easeInOut(duration: 0.3), value: authViewModel.isCheckingAuth)
+            .onChange(of: authViewModel.isAuthenticated) { _, isAuth in
+                if !isAuth {
+                    bookService.stopListening()
+                }
+            }
         }
     }
 
