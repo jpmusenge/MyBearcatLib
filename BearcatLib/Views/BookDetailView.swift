@@ -219,27 +219,35 @@ struct BookDetailView: View {
     // MARK: - Helpers (Same as BookCardView)
     private func gradientColors(for genre: String) -> [Color] {
         switch genre {
-        case "Computer Science": return [Color(hex: "3B5BDB"), Color(hex: "5C7CFA")]
-        case "Mathematics":      return [Color(hex: "D6336C"), Color(hex: "F06595")]
-        case "Literature":       return [Color(hex: "0C8599"), Color(hex: "22B8CF")]
-        case "History":          return [Color(hex: "099268"), Color(hex: "20C997")]
-        case "Science":          return [Color(hex: "E8590C"), Color(hex: "FD7E14")]
-        case "Business":         return [Color(hex: "7048E8"), Color(hex: "9775FA")]
-        case "Psychology":       return [Color(hex: "F08C00"), Color(hex: "FCC419")]
-        default:                 return [Theme.Colors.primary, Theme.Colors.primaryLight]
+        case "Literature", "Language & Literature":
+            return [Color(hex: "0C8599"), Color(hex: "22B8CF")]
+        case "History", "American History", "American History - Local", "World History":
+            return [Color(hex: "099268"), Color(hex: "20C997")]
+        case "Science", "Biology", "Chemistry", "Physics":
+            return [Color(hex: "E8590C"), Color(hex: "FD7E14")]
+        case "Business", "Social Sciences":
+            return [Color(hex: "7048E8"), Color(hex: "9775FA")]        default:                 return [Theme.Colors.primary, Theme.Colors.primaryLight]
         }
     }
     
     private func genreIcon(for genre: String) -> String {
         switch genre {
-        case "Computer Science": return "laptopcomputer"
-        case "Mathematics":      return "x.squareroot"
-        case "Literature":       return "books.vertical.fill"
-        case "History":          return "building.columns.fill"
-        case "Science":          return "atom"
-        case "Business":         return "chart.bar.fill"
-        case "Psychology":       return "brain.head.profile"
-        default:                 return "book.closed.fill"
+        case "Literature", "Language & Literature":
+            return "books.vertical.fill"
+        case "History", "American History", "American History - Local", "World History":
+            return "building.columns.fill"
+        case "Science", "Biology", "Chemistry", "Physics":
+            return "atom"
+        case "Business", "Social Sciences":
+            return "chart.bar.fill"
+        case "Computer Science", "Technology":
+            return "laptopcomputer"
+        case "Mathematics":
+            return "x.squareroot"
+        case "Psychology":
+            return "brain.head.profile"
+        default:
+            return "book.closed.fill"
         }
     }
 }
