@@ -12,63 +12,50 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject var settings: AppSettings
-    
+    @EnvironmentObject var bookService: BookService
+
     @State private var searchText = ""
     @State private var selectedGenre: String = "All"
-    
+
     private var dk: Bool { settings.isDarkMode }
-    
-    // Create an array that includes "All" at the beginning for the filter bar
+
     private var filterOptions: [String] {
-        ["All"] + SampleData.genres
+        ["All"] + bookService.genres
     }
-    
+
     var filteredBooks: [Book] {
-        var results = SampleData.books
-        
-        // 1. Filter by Genre
-        if selectedGenre != "All" {
-            results = results.filter { $0.genre == selectedGenre }
-        }
-        
-        // 2. Filter by Search Text
-        if !searchText.isEmpty {
-            results = results.filter { book in
-                book.title.localizedCaseInsensitiveContains(searchText) ||
-                book.author.localizedCaseInsensitiveContains(searchText) ||
-                book.isbn.contains(searchText)
-            }
-        }
-        
-        return results
+        bookService.filter(genre: selectedGenre, searchText: searchText)
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Native-feeling filter scroll without the heavy drop shadow
                 filterBar
-                Divider() // Standard system separator
-                
-                if filteredBooks.isEmpty {
-                    // Using iOS Native Empty State
+                Divider()
+
+                if bookService.isLoading {
+                    ProgressView("Loading catalog...")
+                        .frame(maxHeight: .infinity)
+                } else if filteredBooks.isEmpty {
                     ContentUnavailableView.search(text: searchText)
                 } else {
-                    // Standard System List (High Density)
                     List {
                         Text("\(filteredBooks.count) results")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
-                        
-                        ForEach(filteredBooks, id: \.isbn) { book in
+
+                        ForEach(filteredBooks, id: \.id) { book in
                             NavigationLink(value: book) {
-                                StandardBookRow(book: book)
+                                StandardBookRow(
+                                    book: book,
+                                    copyInfo: bookService.copyInfo(for: book)
+                                )
                             }
                         }
                     }
-                    .listStyle(.plain) // The standard style for search catalogs
+                    .listStyle(.plain)
                 }
             }
             .navigationTitle("Search Catalog")
@@ -79,7 +66,7 @@ struct SearchView: View {
             }
         }
     }
-    
+
     // MARK: - HIG Filter Bar
     private var filterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -112,40 +99,47 @@ struct SearchView: View {
 // MARK: - Standard System Cell
 struct StandardBookRow: View {
     let book: Book
-    
+    var copyInfo: (total: Int, available: Int) = (1, 1)
+
     var body: some View {
         HStack(spacing: 16) {
             // Minimalist Cover Thumbnail
             ZStack {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(Color(UIColor.secondarySystemFill))
-                
+
                 Text(book.title.prefix(1))
                     .font(.system(.title3, design: .serif, weight: .bold))
                     .foregroundColor(.secondary)
             }
             .frame(width: 50, height: 75)
-            
-            // Text Layout following standard iOS table cell design
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(book.title)
                     .font(.headline)
                     .lineLimit(2)
-                
+
                 Text(book.author)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
-                
+
                 HStack {
-                    // Status
-                    Text(book.isAvailable ? "Available" : "Checked Out")
-                        .font(.caption2)
-                        .fontWeight(.bold)
-                        .foregroundColor(book.isAvailable ? .green : .red)
-                    
+                    // Availability with copy count
+                    if copyInfo.available > 0 {
+                        Text("\(copyInfo.available) of \(copyInfo.total) available")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.green)
+                    } else {
+                        Text("All \(copyInfo.total) checked out")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.red)
+                    }
+
                     Spacer()
-                    
+
                     // Location
                     HStack(spacing: 4) {
                         Image(systemName: "mappin.and.ellipse")
@@ -164,4 +158,5 @@ struct StandardBookRow: View {
 #Preview {
     SearchView()
         .environmentObject(AppSettings())
+        .environmentObject(BookService.shared)
 }

@@ -13,6 +13,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var checkoutService: CheckoutService
 
     // Actions passed in from MainTabView
     var onSearchTapped: () -> Void = {}
@@ -93,23 +94,22 @@ struct HomeView: View {
                 .listRowInsets(EdgeInsets())
 
                 // MARK: - Urgent Alerts (Due Soon)
-                let checkedOut = SampleData.checkedOutBooks
-                if !checkedOut.isEmpty {
+                let dueSoon = checkoutService.userCheckouts.filter { $0.daysUntilDue >= 0 && $0.daysUntilDue <= 3 }
+                if !dueSoon.isEmpty {
                     Section(header: Text("Due Soon")) {
-                        ForEach(checkedOut.prefix(2), id: \.isbn) { book in
+                        ForEach(dueSoon.prefix(2)) { checkout in
                             Button(action: onMyBooksTapped) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(book.title)
+                                        Text(checkout.title)
                                             .font(.subheadline)
                                             .fontWeight(.medium)
                                             .foregroundColor(AdaptiveColors.textPrimary(dk))
                                             .lineLimit(1)
-                                        
-                                        // Using standard Apple HIG warning colors
-                                        Text("Due in 2 days")
+
+                                        Text(checkout.statusText)
                                             .font(.caption)
-                                            .foregroundColor(.orange)
+                                            .foregroundColor(checkout.daysUntilDue == 0 ? .red : .orange)
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.right")
@@ -184,4 +184,6 @@ struct HomeActionTile: View {
     HomeView()
         .environmentObject(AppSettings())
         .environmentObject(AuthViewModel())
+        .environmentObject(BookService.shared)
+        .environmentObject(CheckoutService.shared)
 }
