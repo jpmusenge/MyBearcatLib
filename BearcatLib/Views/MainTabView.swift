@@ -11,6 +11,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var bookService: BookService
     
     // Track which tab is selected. Starts on "browse"
     @State private var selectedTab = "home"
@@ -72,4 +73,5 @@ struct MainTabView: View {
     MainTabView()
         .environmentObject(AppSettings())
         .environmentObject(AuthViewModel())
+        .environmentObject(BookService.shared)
 }
