@@ -10,6 +10,7 @@
 		3ACC54B32F626B55006E576A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACC54B22F626B55006E576A /* FirebaseAuth */; };
 		3ACC54B52F626B55006E576A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACC54B42F626B55006E576A /* FirebaseCore */; };
 		3ACC54C62F627F92006E576A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC54C52F627F92006E576A /* .gitignore */; };
+		3ACC54D52F73AAF1006E576A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3ACC54D42F73AAF1006E576A /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +45,10 @@
 				BearcatLibApp.swift,
 				"GoogleService-Info.plist",
 				Models/Book.swift,
+				Models/Checkout.swift,
 				Services/AuthService.swift,
+				Services/BookService.swift,
+				Services/CheckoutService.swift,
 				Utilities/AppSettings.swift,
 				Utilities/BearcatLibLogo.swift,
 				Utilities/SampleData.swift,
@@ -79,6 +83,9 @@
 		3A199E782F444C660030AC0C /* Exceptions for "BearcatLib" folder in "BearcatLibTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Models/Checkout.swift,
+				Services/BookService.swift,
+				Services/CheckoutService.swift,
 				Views/BookCardView.swift,
 				Views/BookDetailView.swift,
 				Views/DigitalResourcesView.swift,
@@ -123,6 +130,7 @@
 			files = (
 				3ACC54B52F626B55006E576A /* FirebaseCore in Frameworks */,
 				3ACC54B32F626B55006E576A /* FirebaseAuth in Frameworks */,
+				3ACC54D52F73AAF1006E576A /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +159,7 @@
 				3A199DFE2F42E1980030AC0C /* Products */,
 				3A199E0D2F42E19A0030AC0C /* BearcatLibTests */,
 				3ACC54C52F627F92006E576A /* .gitignore */,
+				3ACC54D32F73AAF1006E576A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -162,6 +171,13 @@
 				3A199E142F42E19A0030AC0C /* BearcatLibUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3ACC54D32F73AAF1006E576A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,6 +199,7 @@
 			packageProductDependencies = (
 				3ACC54B22F626B55006E576A /* FirebaseAuth */,
 				3ACC54B42F626B55006E576A /* FirebaseCore */,
+				3ACC54D42F73AAF1006E576A /* FirebaseFirestore */,
 			);
 			productName = BearcatLib;
 			productReference = 3A199DFD2F42E1980030AC0C /* BearcatLib.app */;
@@ -668,6 +685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		3ACC54D42F73AAF1006E576A /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3ACC54B12F626B55006E576A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

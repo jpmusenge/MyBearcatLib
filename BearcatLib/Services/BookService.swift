@@ -53,8 +53,9 @@ class BookService: ObservableObject {
                 self.allBooks = documents.compactMap { doc in
                     self.parseBook(from: doc)
                 }
+                self.deduplicateBooks()
 
-                print("BookService: loaded \(self.allBooks.count) books")
+                print("BookService: loaded \(self.allBooks.count) books (\(self.uniqueBooks.count) unique)")
             }
     }
 
@@ -124,28 +125,72 @@ class BookService: ObservableObject {
         )
     }
 
+    // MARK: - Deduplication
+
+    /// Books deduplicated by title + author. Keeps the first copy found,
+    /// but tracks total copies and available copies for display.
+    /// This is needed because LS2 PAC catalogs list each physical copy separately.
+    @Published var uniqueBooks: [Book] = []
+    @Published var copyCounts: [String: (total: Int, available: Int)] = [:]
+
+    private func deduplicateBooks() {
+        var seen: [String: Int] = [:]       // key -> index in result array
+        var result: [Book] = []
+        var counts: [String: (total: Int, available: Int)] = [:]
+
+        for book in allBooks {
+            let key = "\(book.title.lowercased())|\(book.author.lowercased())"
+
+            if let existingIndex = seen[key] {
+                // Update counts
+                var c = counts[key]!
+                c.total += 1
+                if book.isAvailable { c.available += 1 }
+                counts[key] = c
+
+                // If current copy is available but existing isn't, swap it in
+                if book.isAvailable && !result[existingIndex].isAvailable {
+                    result[existingIndex] = book
+                }
+            } else {
+                seen[key] = result.count
+                result.append(book)
+                counts[key] = (total: 1, available: book.isAvailable ? 1 : 0)
+            }
+        }
+
+        uniqueBooks = result
+        copyCounts = counts
+    }
+
+    /// Get copy info for a book (e.g. "3 copies, 2 available")
+    func copyInfo(for book: Book) -> (total: Int, available: Int) {
+        let key = "\(book.title.lowercased())|\(book.author.lowercased())"
+        return copyCounts[key] ?? (total: 1, available: book.isAvailable ? 1 : 0)
+    }
+
     // MARK: - Computed Filters
 
     /// All unique genres from the catalog, sorted alphabetically.
     var genres: [String] {
-        Array(Set(allBooks.map { $0.genre })).sorted()
+        Array(Set(uniqueBooks.map { $0.genre })).sorted()
     }
 
-    /// Only books currently available.
+    /// Only books currently available (deduplicated).
     var availableBooks: [Book] {
-        allBooks.filter { $0.isAvailable }
+        uniqueBooks.filter { $0.isAvailable }
     }
 
-    /// Only books currently checked out.
+    /// Only books currently checked out (deduplicated).
     var checkedOutBooks: [Book] {
-        allBooks.filter { !$0.isAvailable }
+        uniqueBooks.filter { !$0.isAvailable }
     }
 
     // MARK: - Search & Filter
 
-    /// Filter by genre and search text.
+    /// Filter deduplicated books by genre and search text.
     func filter(genre: String, searchText: String = "") -> [Book] {
-        var results = allBooks
+        var results = uniqueBooks
 
         if genre != "All" {
             results = results.filter { $0.genre == genre }
