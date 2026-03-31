@@ -279,31 +279,25 @@ enum SampleData {
             availableTo: "All Students"
         ),
         LibraryResource(
-            name: "Math Tutoring Lab",
-            description: "Drop-in tutoring for algebra, calculus, statistics, and discrete math. Located on the 2nd floor.",
-            icon: "function",
+            name: "Peer Academic Tutoring",
+            description: "Get help with math, CS, science, and more from trained peer tutors. Request a tutor for any course.",
+            icon: "person.2.fill",
             category: .tutoring,
             url: nil,
             availableTo: "All Students"
         ),
+
+        // Databases (continued)
         LibraryResource(
-            name: "CS Peer Tutoring",
-            description: "Get help with programming assignments, data structures, and algorithms from senior CS students.",
-            icon: "chevron.left.forwardslash.chevron.right",
-            category: .tutoring,
-            url: nil,
-            availableTo: "CS Majors"
+            name: "MAGNOLIA",
+            description: "Mississippi's statewide database consortium. Access 40+ academic databases funded by the state legislature.",
+            icon: "leaf.fill",
+            category: .database,
+            url: "https://magnolia.msstate.edu",
+            availableTo: "All Students"
         ),
-        
+
         // Technology
-        LibraryResource(
-            name: "Laptop Checkout",
-            description: "Borrow a Chromebook or Windows laptop for up to 48 hours. Available at the front desk.",
-            icon: "laptopcomputer",
-            category: .technology,
-            url: nil,
-            availableTo: "All Students"
-        ),
         LibraryResource(
             name: "Charger Lending",
             description: "iPhone, Android, and laptop chargers available for in-library use. Ask at the front desk.",
