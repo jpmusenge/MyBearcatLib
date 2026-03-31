@@ -5,112 +5,143 @@
 //  Created by Joseph Musenge on 2/26/26.
 //
 
+// PURPOSE: Shows library notifications — due date alerts from checkouts + library announcements
+
 import SwiftUI
 
 struct NotificationsView: View {
-    @Environment(\.dismiss) private var dismiss
-        
-    // Using the mock data in SampleData
+    @EnvironmentObject var checkoutService: CheckoutService
+
     let announcements = SampleData.announcements
-    
+
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Theme.Colors.background.ignoresSafeArea()
-                
-                if announcements.isEmpty {
-                    emptyState
-                } else {
-                    ScrollView(showsIndicators: false) {
-                        VStack(spacing: 16) {
-                            ForEach(announcements) { announcement in
-                                NotificationCard(announcement: announcement)
+        List {
+            // MARK: - Due Date Alerts
+            if !checkoutAlerts.isEmpty {
+                Section("Due Date Alerts") {
+                    ForEach(checkoutAlerts, id: \.id) { alert in
+                        HStack(alignment: .top, spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(alert.color.opacity(0.15))
+                                    .frame(width: 36, height: 36)
+
+                                Image(systemName: alert.icon)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(alert.color)
+                            }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(alert.title)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .lineLimit(1)
+
+                                Text(alert.message)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
                             }
                         }
-                        .padding(.horizontal, Theme.Layout.paddingLarge)
-                        .padding(.top, 16)
-                        .padding(.bottom, 32)
+                        .padding(.vertical, 4)
                     }
                 }
             }
-            .navigationTitle("Notifications")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .font(Theme.Fonts.headline)
-                    .foregroundColor(Theme.Colors.primary)
-                }
-            }
-        }
-    }
-    
-    // MARK: - Empty State
-    private var emptyState: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "bell.slash")
-                .font(.system(size: 48))
-                .foregroundColor(Theme.Colors.textSecondary.opacity(0.5))
-            
-            Text("No new notifications")
-                .font(Theme.Fonts.title2)
-                .foregroundColor(Theme.Colors.textPrimary)
-            
-            Text("We'll let you know when you have upcoming due dates or library news.")
-                .font(Theme.Fonts.body)
-                .foregroundColor(Theme.Colors.textSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-        }
-    }
-}
 
-// MARK: - Notification Card
-struct NotificationCard: View {
-    let announcement: Announcement
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            // Icon Indicator
-            ZStack {
-                Circle()
-                    .fill(announcement.isUrgent ? Theme.Colors.error.opacity(0.15) : Theme.Colors.primary.opacity(0.1))
-                    .frame(width: 44, height: 44)
-                
-                Image(systemName: announcement.isUrgent ? "exclamationmark.triangle.fill" : "megaphone.fill")
-                    .font(.system(size: 18))
-                    .foregroundColor(announcement.isUrgent ? Theme.Colors.error : Theme.Colors.primary)
-            }
-            
-            // Text Content
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(alignment: .top) {
-                    Text(announcement.title)
-                        .font(Theme.Fonts.headline)
-                        .foregroundColor(Theme.Colors.textPrimary)
-                    
-                    Spacer()
-                    
-                    Text(announcement.date)
-                        .font(.custom("AvenirNext-Regular", size: 12))
-                        .foregroundColor(Theme.Colors.textSecondary)
+            // MARK: - Library Announcements
+            if !announcements.isEmpty {
+                Section("Library News") {
+                    ForEach(announcements) { announcement in
+                        HStack(alignment: .top, spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(announcement.isUrgent ? Theme.Colors.error.opacity(0.15) : Theme.Colors.primary.opacity(0.1))
+                                    .frame(width: 36, height: 36)
+
+                                Image(systemName: announcement.isUrgent ? "exclamationmark.triangle.fill" : "megaphone.fill")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(announcement.isUrgent ? Theme.Colors.error : Theme.Colors.primary)
+                            }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text(announcement.title)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .lineLimit(1)
+
+                                    Spacer()
+
+                                    Text(announcement.date)
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Text(announcement.summary)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
                 }
-                
-                Text(announcement.summary)
-                    .font(Theme.Fonts.subheadline)
-                    .foregroundColor(Theme.Colors.textSecondary)
-                    .lineSpacing(2)
+            }
+
+            // MARK: - Empty State
+            if checkoutAlerts.isEmpty && announcements.isEmpty {
+                ContentUnavailableView {
+                    Label("No Notifications", systemImage: "bell.slash")
+                } description: {
+                    Text("You're all caught up. Due date reminders and library news will appear here.")
+                }
             }
         }
-        .padding(16)
-        .background(Theme.Colors.surface)
-        .cornerRadius(Theme.Layout.cornerRadius)
-        .shadow(color: Theme.Colors.textPrimary.opacity(0.04), radius: Theme.Layout.cardShadowRadius, x: 0, y: 3)
+        .listStyle(.insetGrouped)
+        .navigationTitle("Notifications")
+    }
+
+    // MARK: - Build Alerts from Checkouts
+
+    private struct CheckoutAlert: Identifiable {
+        let id: String
+        let icon: String
+        let color: Color
+        let title: String
+        let message: String
+        let daysUntilDue: Int
+    }
+
+    private var checkoutAlerts: [CheckoutAlert] {
+        checkoutService.userCheckouts.compactMap { checkout in
+            if checkout.isOverdue {
+                return CheckoutAlert(
+                    id: checkout.id,
+                    icon: "exclamationmark.circle.fill",
+                    color: Theme.Colors.error,
+                    title: checkout.title,
+                    message: "\(checkout.statusText) — please return or renew.",
+                    daysUntilDue: checkout.daysUntilDue
+                )
+            } else if checkout.isDueSoon {
+                return CheckoutAlert(
+                    id: checkout.id,
+                    icon: "clock.fill",
+                    color: .orange,
+                    title: checkout.title,
+                    message: "\(checkout.statusText). Due \(checkout.formattedDueDate).",
+                    daysUntilDue: checkout.daysUntilDue
+                )
+            }
+            return nil
+        }
+        .sorted { $0.daysUntilDue < $1.daysUntilDue }
     }
 }
 
 #Preview {
-    NotificationsView()
+    NavigationStack {
+        NotificationsView()
+            .environmentObject(CheckoutService.shared)
+    }
 }
