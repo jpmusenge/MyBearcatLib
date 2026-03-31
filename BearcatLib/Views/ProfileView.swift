@@ -11,6 +11,7 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var checkoutService: CheckoutService
     @State private var showSignOutAlert = false
     
     var body: some View {
@@ -56,9 +57,13 @@ struct ProfileView: View {
                 // MARK: - Activity Stats
                 Section("Library Activity") {
                     HStack {
-                        DetailStat(label: "Borrowed", value: "\(SampleData.checkedOutBooks.count)")
+                        DetailStat(label: "Borrowed", value: "\(checkoutService.userCheckouts.count)")
                         Divider().padding(.vertical, 4)
-                        DetailStat(label: "Read", value: "24")
+                        DetailStat(
+                            label: "Overdue",
+                            value: "\(checkoutService.overdueCheckouts.count)",
+                            color: checkoutService.overdueCheckouts.isEmpty ? .primary : Theme.Colors.error
+                        )
                         Divider().padding(.vertical, 4)
                         DetailStat(label: "Fines", value: "$0.00")
                     }
@@ -72,9 +77,9 @@ struct ProfileView: View {
                         Label("Dark Mode", systemImage: "moon.fill")
                     }
                     .tint(Theme.Colors.primary)
-                    
+
                     NavigationLink {
-                        Text("Notification Settings")
+                        NotificationsView()
                     } label: {
                         Label("Notifications", systemImage: "bell.fill")
                     }
@@ -83,7 +88,7 @@ struct ProfileView: View {
 
                 // MARK: - Support
                 Section("Support") {
-                    Link(destination: URL(string: "https://www.rustcollege.edu")!) {
+                    Link(destination: URL(string: "https://rustcollege.edu/leontyne-price-library/")!) {
                         Label("Library Website", systemImage: "safari")
                     }
                     NavigationLink("Report an Issue") { Text("Support Form") }
@@ -136,10 +141,12 @@ struct ProfileView: View {
 struct DetailStat: View {
     let label: String
     let value: String
+    var color: Color = .primary
     var body: some View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.headline)
+                .foregroundColor(color)
             Text(label.uppercased())
                 .font(.system(size: 10, weight: .bold))
                 .foregroundColor(.secondary)
@@ -153,4 +160,5 @@ struct DetailStat: View {
     ProfileView()
         .environmentObject(AuthViewModel())
         .environmentObject(AppSettings())
+        .environmentObject(CheckoutService.shared)
 }

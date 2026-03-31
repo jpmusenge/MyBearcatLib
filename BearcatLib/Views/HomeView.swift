@@ -148,7 +148,16 @@ struct HomeView: View {
                 }
             }
             .sheet(isPresented: $showNotifications) {
-                NotificationsView()
+                NavigationStack {
+                    NotificationsView()
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") { showNotifications = false }
+                                    .font(Theme.Fonts.headline)
+                                    .foregroundColor(Theme.Colors.primary)
+                            }
+                        }
+                }
             }
         }
     }
