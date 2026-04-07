@@ -208,6 +208,20 @@ class BookService: ObservableObject {
         return results
     }
 
+    // MARK: - ISBN Lookup
+
+    /// Find books matching a scanned ISBN or barcode.
+    /// Checks the isbn field first, then falls back to the barcode field.
+    /// Returns all copies (not deduplicated) so caller can show copy counts.
+    func findByISBN(_ scannedCode: String) -> [Book] {
+        let code = scannedCode.trimmingCharacters(in: .whitespaces)
+        return allBooks.filter { book in
+            book.isbn == code ||
+            book.isbn.replacingOccurrences(of: "-", with: "") == code ||
+            book.barcode == code
+        }
+    }
+
     /// Fetch a single book by Firestore document ID.
     func fetchBook(id: String, completion: @escaping (Book?) -> Void) {
         db.collection(collectionName).document(id).getDocument { [weak self] snapshot, error in

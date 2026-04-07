@@ -22,6 +22,7 @@ struct HomeView: View {
     var onMyBooksTapped: () -> Void = {}
     
     @State private var showNotifications = false
+    @State private var showScanner = false
     private var dk: Bool { settings.isDarkMode }
     
     var body: some View {
@@ -72,7 +73,7 @@ struct HomeView: View {
                         }
                         .buttonStyle(.plain)
                         
-                        Button(action: {}) {
+                        Button(action: { showScanner = true }) {
                             HomeActionTile(title: "Scan ISBN", icon: "barcode.viewfinder", color: Theme.Colors.primary)
                         }
                         .buttonStyle(.plain)
@@ -158,6 +159,9 @@ struct HomeView: View {
                             }
                         }
                 }
+            }
+            .fullScreenCover(isPresented: $showScanner) {
+                ISBNScannerView()
             }
         }
     }
