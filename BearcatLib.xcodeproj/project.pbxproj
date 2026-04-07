@@ -49,17 +49,20 @@
 				Services/AuthService.swift,
 				Services/BookService.swift,
 				Services/CheckoutService.swift,
+				Services/NotificationService.swift,
 				Utilities/AppSettings.swift,
 				Utilities/BearcatLibLogo.swift,
 				Utilities/SampleData.swift,
 				Utilities/Theme.swift,
 				ViewModels/AuthViewModel.swift,
+				Views/BarcodeScannerView.swift,
 				Views/BookCardView.swift,
 				Views/BookDetailView.swift,
 				Views/BookSearch/BookRowView.swift,
 				Views/DigitalResourcesView.swift,
 				Views/ForgotPasswordView.swift,
 				Views/HomeView.swift,
+				Views/ISBNScannerView.swift,
 				Views/LoginView.swift,
 				Views/MainTabView.swift,
 				Views/MyBooksView.swift,
@@ -67,6 +70,7 @@
 				Views/ProfileView.swift,
 				Views/RegisterView.swift,
 				Views/SearchView.swift,
+				Views/TutoringRequestView.swift,
 				Views/WelcomeView.swift,
 			);
 			target = 3A199DFC2F42E1980030AC0C /* BearcatLib */;
@@ -86,15 +90,19 @@
 				Models/Checkout.swift,
 				Services/BookService.swift,
 				Services/CheckoutService.swift,
+				Services/NotificationService.swift,
+				Views/BarcodeScannerView.swift,
 				Views/BookCardView.swift,
 				Views/BookDetailView.swift,
 				Views/DigitalResourcesView.swift,
 				Views/HomeView.swift,
+				Views/ISBNScannerView.swift,
 				Views/MainTabView.swift,
 				Views/MyBooksView.swift,
 				Views/NotificationsView.swift,
 				Views/ProfileView.swift,
 				Views/SearchView.swift,
+				Views/TutoringRequestView.swift,
 			);
 			target = 3A199E092F42E19A0030AC0C /* BearcatLibTests */;
 		};
@@ -490,9 +498,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "BearcatLib uses your camera to scan book barcodes and look them up in the library catalog.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "BearcatLib uses your camera to scan book barcodes and look them up in the library catalog.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -522,9 +530,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "BearcatLib uses your camera to scan book barcodes and look them up in the library catalog.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "BearcatLib uses your camera to scan book barcodes and look them up in the library catalog.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
