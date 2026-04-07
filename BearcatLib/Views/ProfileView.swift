@@ -78,10 +78,26 @@ struct ProfileView: View {
                     }
                     .tint(Theme.Colors.primary)
 
+                    Toggle(isOn: $settings.notificationsEnabled) {
+                        Label("Due Date Reminders", systemImage: "bell.badge.fill")
+                    }
+                    .tint(Theme.Colors.primary)
+                    .onChange(of: settings.notificationsEnabled) { _, enabled in
+                        if enabled {
+                            NotificationService.shared.requestPermission()
+                            NotificationService.shared.scheduleReminders(
+                                for: checkoutService.userCheckouts,
+                                enabled: true
+                            )
+                        } else {
+                            NotificationService.shared.clearAllReminders()
+                        }
+                    }
+
                     NavigationLink {
                         NotificationsView()
                     } label: {
-                        Label("Notifications", systemImage: "bell.fill")
+                        Label("Notification History", systemImage: "bell.fill")
                     }
                 }
                 .listRowBackground(AdaptiveColors.surface(settings.isDarkMode))
