@@ -117,6 +117,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
 
-        onScanned(isbn)
+        onScanned?(isbn)
     }
 }
