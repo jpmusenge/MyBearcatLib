@@ -9,6 +9,7 @@
 // Download from Firebase Console > Project Settings > iOS app.
 
 import SwiftUI
+import Combine
 import FirebaseCore
 
 @main
@@ -18,8 +19,13 @@ struct BearcatLibApp: App {
     @StateObject private var bookService = BookService.shared
     @StateObject private var checkoutService = CheckoutService.shared
 
+    /// Tracks checkout changes to reschedule reminders
+    @State private var checkoutCancellable: AnyCancellable?
+
     init() {
         FirebaseApp.configure()
+        // Register notification actions (Renew / View)
+        NotificationService.shared.registerCategories()
     }
 
     var body: some Scene {
@@ -36,6 +42,18 @@ struct BearcatLibApp: App {
                         .onAppear {
                             bookService.startListening()
                             checkoutService.startListening()
+
+                            // Request notification permission on first sign-in
+                            if settings.notificationsEnabled {
+                                NotificationService.shared.requestPermission()
+                            }
+                        }
+                        .onReceive(checkoutService.$userCheckouts) { checkouts in
+                            // Reschedule reminders whenever checkouts change
+                            NotificationService.shared.scheduleReminders(
+                                for: checkouts,
+                                enabled: settings.notificationsEnabled
+                            )
                         }
                 } else {
                     authFlowView
@@ -50,6 +68,7 @@ struct BearcatLibApp: App {
                 if !isAuth {
                     bookService.stopListening()
                     checkoutService.stopListening()
+                    NotificationService.shared.clearAllReminders()
                 }
             }
         }
