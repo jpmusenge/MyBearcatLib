@@ -18,6 +18,7 @@ struct BearcatLibApp: App {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var bookService = BookService.shared
     @StateObject private var checkoutService = CheckoutService.shared
+    @StateObject private var reservationService = ReservationService.shared
 
     /// Tracks checkout changes to reschedule reminders
     @State private var checkoutCancellable: AnyCancellable?
@@ -39,9 +40,11 @@ struct BearcatLibApp: App {
                         .environmentObject(authViewModel)
                         .environmentObject(bookService)
                         .environmentObject(checkoutService)
+                        .environmentObject(reservationService)
                         .onAppear {
                             bookService.startListening()
                             checkoutService.startListening()
+                            reservationService.startListening()
 
                             // Request notification permission on first sign-in
                             if settings.notificationsEnabled {
@@ -68,6 +71,7 @@ struct BearcatLibApp: App {
                 if !isAuth {
                     bookService.stopListening()
                     checkoutService.stopListening()
+                    reservationService.stopListening()
                     NotificationService.shared.clearAllReminders()
                 }
             }
