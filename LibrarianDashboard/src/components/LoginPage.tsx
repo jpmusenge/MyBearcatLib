@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { BookOpen, Loader2 } from "lucide-react";
+import Logo from "./Logo";
 
 interface Props {
   onSignIn: (email: string, password: string) => Promise<void>;
@@ -34,20 +35,20 @@ export default function LoginPage({ onSignIn }: Props) {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2E5FBF] to-[#0F2557] shadow-lg shadow-blue-900/25 mb-4">
-            <BookOpen className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-slate-900">MyBearcatLib</h1>
-          <p className="text-sm text-slate-500 mt-1">Librarian Dashboard</p>
+        {/* Brand Lockup */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Logo className="w-20 h-20 mb-5" />
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">MyBearcatLib</h1>
+          <p className="text-[10px] font-bold text-slate-500 mt-1 tracking-widest uppercase">
+            Leontyne Price Library
+          </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">Sign in</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Librarian Access</h2>
           <p className="text-sm text-slate-500 mb-6">
-            Use your Rust College email to access the dashboard.
+            Sign in with your staff email to manage checkouts.
           </p>
 
           <div className="space-y-4">
@@ -58,7 +59,7 @@ export default function LoginPage({ onSignIn }: Props) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@rustcollege.edu"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3C8B]/20 focus:border-[#1A3C8B] transition-colors"
                 required
               />
             </div>
@@ -84,10 +85,10 @@ export default function LoginPage({ onSignIn }: Props) {
           <button
             type="submit"
             disabled={loading}
-            className="mt-6 w-full py-2.5 px-4 rounded-lg bg-[#1A3C8B] text-white text-sm font-semibold hover:bg-[#2E5FBF] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+            className="mt-6 w-full py-2.5 px-4 rounded-lg bg-[#1A3C8B] text-white text-sm font-semibold hover:bg-[#0F2557] disabled:opacity-50 transition-colors flex items-center justify-center gap-2 shadow-sm"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Authenticating..." : "Sign In"}
           </button>
         </form>
 
