@@ -17,34 +17,10 @@ struct BookCardView: View {
             
             // MARK: - Book Cover
             ZStack(alignment: .topTrailing) {
-                // Book Cover Background
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(
-                        LinearGradient(
-                            colors: gradientColors(for: book.genre),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                // Typography-driven cover art (First letter of title)
-                VStack {
-                    Spacer()
-                    Text(book.title.prefix(1))
-                        .font(.system(size: 65, weight: .bold, design: .serif))
-                        .foregroundColor(.white.opacity(0.25))
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity)
-                
-                // Genre Icon as a subtle watermark
-                Image(systemName: genreIcon(for: book.genre))
-                    .font(.system(size: 28, weight: .light))
-                    .foregroundColor(.white.opacity(0.4))
-                    .padding(14)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                
-                // Availability Badge - Moved to a cleaner overlay
+                // Book Cover — real image or gradient fallback
+                bookCoverContent
+
+                // Availability Badge
                 if book.isAvailable {
                     Text("Available")
                         .font(.system(size: 10, weight: .bold))
@@ -66,6 +42,7 @@ struct BookCardView: View {
                 }
             }
             .frame(width: 140, height: 210) // Standard 2:3 physical book aspect ratio
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             .shadow(color: Theme.Colors.textPrimary.opacity(0.08), radius: 8, x: 0, y: 4)
             
             // MARK: - Book Details
@@ -97,6 +74,59 @@ struct BookCardView: View {
         }
     }
     
+    // MARK: - Book Cover
+
+    @ViewBuilder
+    private var bookCoverContent: some View {
+        let isbn = book.isbn.replacingOccurrences(of: "-", with: "")
+        if !isbn.isEmpty, let url = URL(string: "https://covers.openlibrary.org/b/isbn/\(isbn)-M.jpg") {
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                case .failure:
+                    fallbackCover
+                case .empty:
+                    fallbackCover
+                @unknown default:
+                    fallbackCover
+                }
+            }
+        } else {
+            fallbackCover
+        }
+    }
+
+    private var fallbackCover: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(
+                    LinearGradient(
+                        colors: gradientColors(for: book.genre),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            VStack {
+                Spacer()
+                Text(book.title.prefix(1))
+                    .font(.system(size: 65, weight: .bold, design: .serif))
+                    .foregroundColor(.white.opacity(0.25))
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+
+            Image(systemName: genreIcon(for: book.genre))
+                .font(.system(size: 28, weight: .light))
+                .foregroundColor(.white.opacity(0.4))
+                .padding(14)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+        }
+    }
+
     // MARK: - Helpers
     private func gradientColors(for genre: String) -> [Color] {
         // Soft gradients that look like premium book covers
