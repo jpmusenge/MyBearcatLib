@@ -4,17 +4,12 @@ A native iOS app for Rust College's Leontyne Price Library: real-time book check
 
 Built as my senior capstone project at Rust College.
 
-<!-- Screenshots: add images to docs/screenshots/ and uncomment.
 <p align="center">
-  <img src="docs/screenshots/home.png" width="200" alt="Home" />
-  <img src="docs/screenshots/search.png" width="200" alt="Search" />
-  <img src="docs/screenshots/book-detail.png" width="200" alt="Book detail" />
-  <img src="docs/screenshots/my-books.png" width="200" alt="My Books" />
+  <img src="docs/screenshots/home.png" width="200" alt="Home screen with quick actions" />
+  <img src="docs/screenshots/search.png" width="200" alt="Catalog search with genre filters and live availability" />
+  <img src="docs/screenshots/my-books.png" width="200" alt="My Books with renew and return" />
+  <img src="docs/screenshots/profile.png" width="200" alt="Account profile and preferences" />
 </p>
-<p align="center">
-  <img src="docs/screenshots/dashboard.png" width="820" alt="Librarian dashboard" />
-</p>
--->
 
 ## Features
 
